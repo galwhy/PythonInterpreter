@@ -24,7 +24,7 @@ int main()
 		{
 			lexer->Lex(codeLine);
 		}
-		//lexer->ToString();
+		lexer->ToString();
 
 		Parser* parser = new Parser();
 		parser->Parse(lexer->GetTokenList());

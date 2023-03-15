@@ -28,4 +28,7 @@ public:
 	Token();
 
 	Token(Type type, string value, int indentation, int line);
+
+	Token(Type type, string value);
+
 };

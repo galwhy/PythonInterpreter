@@ -142,7 +142,7 @@ void Parser::Parse(vector<Token*>* TokenList)
 
 			if (!boolOutputStack->empty())
 			{
-				Node* newTree = new Node(boolOutputStack->top(), currentBoolTree);
+				BoolNode* newTree = new BoolNode(boolOutputStack->top(), currentBoolTree);
 				boolOutputStack->pop();
 				currentBoolTree->InsertChild(newTree);
 				currentBoolTree = newTree;
@@ -153,7 +153,7 @@ void Parser::Parse(vector<Token*>* TokenList)
 			{
 				if (!boolOutputStack->empty())
 				{
-					Node* newTree1 = new Node(boolOutputStack->top(), currentBoolTree);
+					BoolNode* newTree1 = new BoolNode(boolOutputStack->top(), currentBoolTree);
 					boolOutputStack->pop();
 					currentBoolTree->InsertChild(newTree1);
 
@@ -174,14 +174,23 @@ void Parser::Parse(vector<Token*>* TokenList)
 
 		if (currentToken->type == Type::Keyword)
 		{
+			if (currentToken->value == "return")
+			{
+				ReturnNode* newTree = new ReturnNode(currentToken, currentTree);
+				currentTree->InsertChild(newTree);
+			}
+			else
+			{
+				GlobalNode* newTree = new GlobalNode(currentToken, currentTree);
+				currentTree->InsertChild(newTree);
+			}
 			numericCheck = false;
-			GlobalNode* newTree = new GlobalNode(currentToken, currentTree);
-			currentTree->InsertChild(newTree);
+			
 		}
 		else if (currentToken->type == Type::Branch)
 		{
 			numericCheck = false;
-			Node* newTree = new Node(currentToken, currentTree);
+			BranchNode* newTree = new BranchNode(currentToken, currentTree);
 			currentTree->InsertChild(newTree);
 			currentTree = newTree;
 			conditionCheck = true;
@@ -266,7 +275,7 @@ void Parser::Parse(vector<Token*>* TokenList)
 			}
 			else
 			{
-				Node* newTree = new Node(currentToken, currentTree);
+				CompareNode* newTree = new CompareNode(currentToken, currentTree);
 				currentTree->InsertChild(newTree);
 			}
 			//operatorCount++;
@@ -333,6 +342,12 @@ void Parser::Parse(vector<Token*>* TokenList)
 			}*/
 		}
 		lastIndentation = currentToken->indentation;
+	}
+	if (syntaxTree->Root->GetLastChild()->Value->value != "return")
+	{
+		Token* currentToken = new Token(Type::Keyword, "return");
+		ReturnNode* newTree = new ReturnNode(currentToken, currentTree);
+		syntaxTree->Root->InsertChild(newTree);
 	}
 }
 

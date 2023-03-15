@@ -8,4 +8,6 @@ CodeObject::CodeObject()
 	this->co_names = new vector<Token*>();
 	this->co_varnames = new vector<Token*>();
 	this->co_consts = new vector<Token*>();
+	this->co_consts->push_back(NULL);
+	this->cmp_op = {"<", "<=", "==", "!=", ">", ">="};
 }

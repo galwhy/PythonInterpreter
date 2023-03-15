@@ -80,3 +80,51 @@ public:
 
 	void ToByteCode(CodeObject* codeObject, vector<ByteCode*>* ByteCodeList);
 };
+
+class CompareNode : public Node
+{
+public:
+	CompareNode();
+
+	CompareNode(Token* Value);
+
+	CompareNode(Token* Value, Node* Parent);
+
+	void ToByteCode(CodeObject* codeObject, vector<ByteCode*>* ByteCodeList);
+};
+
+class BranchNode : public Node
+{
+public:
+	BranchNode();
+
+	BranchNode(Token* Value);
+
+	BranchNode(Token* Value, Node* Parent);
+
+	void ToByteCode(CodeObject* codeObject, vector<ByteCode*>* ByteCodeList);
+};
+
+class BoolNode : public Node
+{
+public:
+	BoolNode();
+
+	BoolNode(Token* Value);
+
+	BoolNode(Token* Value, Node* Parent);
+
+	void ToByteCode(CodeObject* codeObject, vector<ByteCode*>* ByteCodeList);
+};
+
+class ReturnNode : public Node
+{
+public:
+	ReturnNode();
+
+	ReturnNode(Token* Value);
+
+	ReturnNode(Token* Value, Node* Parent);
+
+	void ToByteCode(CodeObject* codeObject, vector<ByteCode*>* ByteCodeList);
+};

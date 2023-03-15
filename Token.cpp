@@ -14,6 +14,13 @@ Token::Token(Type type, string value, int indentation, int line)
 	this->priority = 0;
 }
 
+Token::Token(Type type, string value)
+{
+	this->type = type;
+	this->value = value;
+	this->priority = 0;
+}
+
 Token::Token()
 {
 	this->indentation = 0;
