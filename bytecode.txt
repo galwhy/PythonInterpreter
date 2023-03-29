@@ -1,0 +1,18 @@
+stacks:
+
+	call stack -> function call stack, keeps track of every function that has been called. if you call a function you push into the stack when returning from function pop it 	from the stack
+
+	evaluation stack/data stack -> main stack for each function where the calculations of the functions happen
+
+	block stack -> used to keep track of blocks like loops, conditioners etc. when existing blocks pop the stack.
+
+
+	when calling a function you load all the variables into the stacks using LOAD_NAME and LOAD_CONST then you call CALL_FUNCTION and give it the number of items you pushed 	into the stack, inside a function you load a new frame in the call stack for the function.
+
+tuples:
+
+	co_names -> holds all the global attributes and functions that are used inside a scope.
+
+	co_varnames -> holds all the var names that are used in the function.
+
+	co_consts -> holds all of the literals that are used in the function.

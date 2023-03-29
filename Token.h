@@ -16,10 +16,17 @@ enum class Type {
 	Branch
 };
 
+enum class LiteralType {
+	String,
+	Int,
+	Bool
+};
+
 class Token
 {
 public:
 	Type type;
+	LiteralType literalType;
 	string value;
 	int indentation;
 	int line;
