@@ -62,21 +62,40 @@ void Compiler::Compile(AbstractSyntaxTree* syntaxTree)
 void Compiler::BuildCode(Node* node)
 {
 	vector<Node*>* treeList = node->Children;
+	bool doesExist = false;
 	if (node != nullptr)
 	{
 		if (node->Value != NULL)
 		{
 			if (node->Value->type == Type::Identifier)
 			{
-				codeObject->co_varnames->push_back(node->Value);
+				for (Token* value : *codeObject->co_varnames)
+				{
+					if (value->value == node->Value->value)
+						doesExist = true;
+				}
+				if (!doesExist)
+					codeObject->co_varnames->push_back(node->Value);
 			}
 			if (node->Value->type == Type::Keyword)
 			{
-				codeObject->co_names->push_back(node->Value);
+				for (Token* value : *codeObject->co_names)
+				{
+					if (value->value == node->Value->value)
+						doesExist = true;
+				}
+				if (!doesExist)
+					codeObject->co_names->push_back(node->Value);
 			}
 			if (node->Value->type == Type::Literal)
 			{
-				codeObject->co_consts->push_back(node->Value);
+				for (Token* value : *codeObject->co_consts)
+				{
+					if (value != NULL && value->value == node->Value->value)
+						doesExist = true;
+				}
+				if (!doesExist)
+					codeObject->co_consts->push_back(node->Value);
 			}
 		}
 		
@@ -85,6 +104,16 @@ void Compiler::BuildCode(Node* node)
 			BuildCode(Tree);
 		}
 	}
+}
+
+CodeObject* Compiler::GetCodeObject()
+{
+	return codeObject;
+}
+
+vector<ByteCode*>* Compiler::GetByteCodeList()
+{
+	return ByteCodeList;
 }
 
 void Compiler::ToString()

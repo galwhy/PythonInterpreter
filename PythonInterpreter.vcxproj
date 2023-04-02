@@ -131,6 +131,7 @@
     <ClCompile Include="ByteCode.cpp" />
     <ClCompile Include="CodeObject.cpp" />
     <ClCompile Include="Compiler.cpp" />
+    <ClCompile Include="Interpreter.cpp" />
     <ClCompile Include="Lexer.cpp" />
     <ClCompile Include="Node.cpp" />
     <ClCompile Include="Parser.cpp" />
@@ -142,6 +143,7 @@
     <ClInclude Include="ByteCode.h" />
     <ClInclude Include="CodeObject.h" />
     <ClInclude Include="Compiler.h" />
+    <ClInclude Include="Interpreter.h" />
     <ClInclude Include="Lexer.h" />
     <ClInclude Include="Node.h" />
     <ClInclude Include="Parser.h" />

@@ -77,15 +77,29 @@ void EqualNode::ToByteCode(CodeObject* codeObject, vector<ByteCode*>* ByteCodeLi
 	
 	if (Children->at(1)->Value->type == Type::Literal)
 	{
-		auto it = find(codeObject->co_consts->begin(), codeObject->co_consts->end(), Children->at(1)->Value);
-		int index = it - codeObject->co_consts->begin();
+		int index;
+		for (int i = 1; i < codeObject->co_consts->size(); i++)
+		{
+			if (codeObject->co_consts->at(i)->value == Children->at(1)->Value->value)
+			{
+				index = i;
+				break;
+			}
+		}
 		ByteCode* byteCode = new ByteCode(OpCodeCommands::LOAD_CONST, index);
 		ByteCodeList->push_back(byteCode);
 	}
 	else if (Children->at(1)->Value->type == Type::Identifier)
 	{
-		auto it = find(codeObject->co_varnames->begin(), codeObject->co_varnames->end(), Children->at(1)->Value);
-		int index = it - codeObject->co_varnames->begin();
+		int index;
+		for (int i = 0; i < codeObject->co_varnames->size(); i++)
+		{
+			if (codeObject->co_varnames->at(i)->value == Children->at(1)->Value->value)
+			{
+				index = i;
+				break;
+			}
+		}
 		ByteCode* byteCode = new ByteCode(OpCodeCommands::LOAD_FAST, index);
 		ByteCodeList->push_back(byteCode);
 	}
@@ -94,8 +108,15 @@ void EqualNode::ToByteCode(CodeObject* codeObject, vector<ByteCode*>* ByteCodeLi
 		Children->at(1)->ToByteCode(codeObject, ByteCodeList);
 	}
 
-	auto it = find(codeObject->co_varnames->begin(), codeObject->co_varnames->begin(), Children->at(0)->Value);
-	int index = it - codeObject->co_varnames->begin();
+	int index;
+	for (int i = 0; i < codeObject->co_varnames->size(); i++)
+	{
+		if (codeObject->co_varnames->at(i)->value == Children->at(0)->Value->value)
+		{
+			index = i;
+			break;
+		}
+	}
 	ByteCode* byteCode = new ByteCode(OpCodeCommands::STORE_FAST, index);
 	ByteCodeList->push_back(byteCode);
 }
@@ -114,15 +135,29 @@ void OperatorNode::ToByteCode(CodeObject* codeObject, vector<ByteCode*>* ByteCod
 	{
 		if (child->Value->type == Type::Literal)
 		{
-			auto it = find(codeObject->co_consts->begin(), codeObject->co_consts->end(), child->Value);
-			int index = it - codeObject->co_consts->begin();
+			int index;
+			for (int i = 1; i < codeObject->co_consts->size(); i++)
+			{
+				if (codeObject->co_consts->at(i)->value == child->Value->value)
+				{
+					index = i;
+					break;
+				}
+			}
 			ByteCode* byteCode = new ByteCode(OpCodeCommands::LOAD_CONST, index);
 			ByteCodeList->push_back(byteCode);
 		}
 		else if (child->Value->type == Type::Identifier)
 		{
-			auto it = find(codeObject->co_varnames->begin(), codeObject->co_varnames->end(), child->Value);
-			int index = it - codeObject->co_varnames->begin();
+			int index;
+			for (int i = 0; i < codeObject->co_varnames->size(); i++)
+			{
+				if (codeObject->co_varnames->at(i)->value == child->Value->value)
+				{
+					index = i;
+					break;
+				}
+			}
 			ByteCode* byteCode = new ByteCode(OpCodeCommands::LOAD_FAST, index);
 			ByteCodeList->push_back(byteCode);
 		}
@@ -157,8 +192,15 @@ GlobalNode::GlobalNode(Token* Value, Node* Parent) : Node(Value, Parent) {};
 
 void GlobalNode::ToByteCode(CodeObject* codeObject, vector<ByteCode*>* ByteCodeList)
 {
-	auto it = find(codeObject->co_names->begin(), codeObject->co_names->end(), Value);
-	int index = it - codeObject->co_names->begin();
+	int index;
+	for (int i = 0; i < codeObject->co_names->size(); i++)
+	{
+		if (codeObject->co_names->at(i)->value == Value->value)
+		{
+			index = i;
+			break;
+		}
+	}
 	ByteCode* byteCode = new ByteCode(OpCodeCommands::LOAD_GLOBAL, index);
 	ByteCodeList->push_back(byteCode);
 
@@ -167,15 +209,29 @@ void GlobalNode::ToByteCode(CodeObject* codeObject, vector<ByteCode*>* ByteCodeL
 	{
 		if (child->Value->type == Type::Literal)
 		{
-			auto it = find(codeObject->co_consts->begin(), codeObject->co_consts->end(), child->Value);
-			int index = it - codeObject->co_consts->begin();
+			int index;
+			for (int i = 1; i < codeObject->co_consts->size(); i++)
+			{
+				if (codeObject->co_consts->at(i)->value == child->Value->value)
+				{
+					index = i;
+					break;
+				}
+			}
 			ByteCode* byteCode = new ByteCode(OpCodeCommands::LOAD_CONST, index);
 			ByteCodeList->push_back(byteCode);
 		}
 		else if (child->Value->type == Type::Identifier)
 		{
-			auto it = find(codeObject->co_varnames->begin(), codeObject->co_varnames->end(), child->Value);
-			int index = it - codeObject->co_varnames->begin();
+			int index;
+			for (int i = 0; i < codeObject->co_varnames->size(); i++)
+			{
+				if (codeObject->co_varnames->at(i)->value == child->Value->value)
+				{
+					index = i;
+					break;
+				}
+			}
 			ByteCode* byteCode = new ByteCode(OpCodeCommands::LOAD_FAST, index);
 			ByteCodeList->push_back(byteCode);
 		}
@@ -206,15 +262,29 @@ void CompareNode::ToByteCode(CodeObject* codeObject, vector<ByteCode*>* ByteCode
 	{
 		if (child->Value->type == Type::Literal)
 		{
-			auto it = find(codeObject->co_consts->begin(), codeObject->co_consts->end(), child->Value);
-			int index = it - codeObject->co_consts->begin();
+			int index;
+			for (int i = 1; i < codeObject->co_consts->size(); i++)
+			{
+				if (codeObject->co_consts->at(i)->value == child->Value->value)
+				{
+					index = i;
+					break;
+				}
+			}
 			ByteCode* byteCode = new ByteCode(OpCodeCommands::LOAD_CONST, index);
 			ByteCodeList->push_back(byteCode);
 		}
 		else if (child->Value->type == Type::Identifier)
 		{
-			auto it = find(codeObject->co_varnames->begin(), codeObject->co_varnames->end(), child->Value);
-			int index = it - codeObject->co_varnames->begin();
+			int index;
+			for (int i = 0; i < codeObject->co_varnames->size(); i++)
+			{
+				if (codeObject->co_varnames->at(i)->value == child->Value->value)
+				{
+					index = i;
+					break;
+				}
+			}
 			ByteCode* byteCode = new ByteCode(OpCodeCommands::LOAD_FAST, index);
 			ByteCodeList->push_back(byteCode);
 		}
@@ -240,21 +310,35 @@ BranchNode::BranchNode(Token* Value, Node* Parent) : Node(Value, Parent) {};
 
 void BranchNode::ToByteCode(CodeObject* codeObject, vector<ByteCode*>* ByteCodeList)
 {
-	int startLine = (ByteCodeList->size()-1)*2;
+	int startLine = (ByteCodeList->size())*2;
 
 	for (int i = 0; i < Children->size(); i++)
 	{
 		if (Children->at(i)->Value->type == Type::Literal)
 		{
-			auto it = find(codeObject->co_consts->begin(), codeObject->co_consts->end(), Children->at(i)->Value);
-			int index = it - codeObject->co_consts->begin();
+			int index;
+			for (int i = 1; i < codeObject->co_consts->size(); i++)
+			{
+				if (codeObject->co_consts->at(i)->value == Children->at(i)->Value->value)
+				{
+					index = i;
+					break;
+				}
+			}
 			ByteCode* byteCode = new ByteCode(OpCodeCommands::LOAD_CONST, index);
 			ByteCodeList->push_back(byteCode);
 		}
 		else if (Children->at(i)->Value->type == Type::Identifier)
 		{
-			auto it = find(codeObject->co_varnames->begin(), codeObject->co_varnames->end(), Children->at(i)->Value);
-			int index = it - codeObject->co_varnames->begin();
+			int index;
+			for (int i = 0; i < codeObject->co_varnames->size(); i++)
+			{
+				if (codeObject->co_varnames->at(i)->value == Children->at(i)->Value->value)
+				{
+					index = i;
+					break;
+				}
+			}
 			ByteCode* byteCode = new ByteCode(OpCodeCommands::LOAD_FAST, index);
 			ByteCodeList->push_back(byteCode);
 		}
@@ -273,11 +357,11 @@ void BranchNode::ToByteCode(CodeObject* codeObject, vector<ByteCode*>* ByteCodeL
 				ByteCodeList->push_back(byteCode);
 				startLine = ByteCodeList->size() * 2;
 			}
-			else if (Value->value == "while")
+			else
 			{
 				if (Children->at(0)->Value->value != "or" && Children->at(0)->Value->value != "and")
 				{
-					ByteCode* byteCode = new ByteCode(OpCodeCommands::JUMP_IF_FALSE);
+					ByteCode* byteCode = new ByteCode(OpCodeCommands::JUMP_IF_FALSE, -1);
 					ByteCodeList->push_back(byteCode);
 				}
 			}
@@ -288,16 +372,17 @@ void BranchNode::ToByteCode(CodeObject* codeObject, vector<ByteCode*>* ByteCodeL
 	{
 		if (Value->value == "for")
 		{
-			ByteCodeList->at(startLine)->OperandArg = (ByteCodeList->size()-1) * 2;
+			ByteCodeList->at(startLine)->OperandArg = (ByteCodeList->size()) * 2;
 		}
 		ByteCode* byteCode = new ByteCode(OpCodeCommands::JUMP_ABSOLUTE, startLine);
 		ByteCodeList->push_back(byteCode);
 	}
-	for (int i = startLine; i < ByteCodeList->size(); i++)
+	for (int i = startLine/2; i < ByteCodeList->size(); i++)
 	{
 		if (ByteCodeList->at(i)->OpCode == OpCodeCommands::JUMP_IF_FALSE || ByteCodeList->at(i)->OpCode == OpCodeCommands::JUMP_IF_TRUE)
 		{
-			ByteCodeList->at(i)->OperandArg = (ByteCodeList->size() - 1) * 2;
+			if (ByteCodeList->at(i)->OperandArg == -1)
+				ByteCodeList->at(i)->OperandArg = (ByteCodeList->size()) * 2;
 		}
 	}
 }
@@ -316,15 +401,29 @@ void BoolNode::ToByteCode(CodeObject* codeObject, vector<ByteCode*>* ByteCodeLis
 	{
 		if (child->Value->type == Type::Literal)
 		{
-			auto it = find(codeObject->co_consts->begin(), codeObject->co_consts->end(), child->Value);
-			int index = it - codeObject->co_consts->begin();
+			int index;
+			for (int i = 1; i < codeObject->co_consts->size(); i++)
+			{
+				if (codeObject->co_consts->at(i)->value == child->Value->value)
+				{
+					index = i;
+					break;
+				}
+			}
 			ByteCode* byteCode = new ByteCode(OpCodeCommands::LOAD_CONST, index);
 			ByteCodeList->push_back(byteCode);
 		}
 		else if (child->Value->type == Type::Identifier)
 		{
-			auto it = find(codeObject->co_varnames->begin(), codeObject->co_varnames->end(), child->Value);
-			int index = it - codeObject->co_varnames->begin();
+			int index;
+			for (int i = 0; i < codeObject->co_varnames->size(); i++)
+			{
+				if (codeObject->co_varnames->at(i)->value == child->Value->value)
+				{
+					index = i;
+					break;
+				}
+			}
 			ByteCode* byteCode = new ByteCode(OpCodeCommands::LOAD_FAST, index);
 			ByteCodeList->push_back(byteCode);
 		}
@@ -336,11 +435,11 @@ void BoolNode::ToByteCode(CodeObject* codeObject, vector<ByteCode*>* ByteCodeLis
 		ByteCode* byteCode;
 		if (Value->value == "or")
 		{
-			byteCode = new ByteCode(OpCodeCommands::JUMP_IF_FALSE);
+			byteCode = new ByteCode(OpCodeCommands::JUMP_IF_FALSE, -1);
 		}
 		else if (Value->value == "and")
 		{
-			byteCode = new ByteCode(OpCodeCommands::JUMP_IF_TRUE);
+			byteCode = new ByteCode(OpCodeCommands::JUMP_IF_TRUE, -1);
 		}
 		ByteCodeList->push_back(byteCode);
 
@@ -363,15 +462,29 @@ void ReturnNode::ToByteCode(CodeObject* codeObject, vector<ByteCode*>* ByteCodeL
 	{
 		if (child->Value->type == Type::Literal)
 		{
-			auto it = find(codeObject->co_consts->begin(), codeObject->co_consts->end(), child->Value);
-			int index = it - codeObject->co_consts->begin();
+			int index;
+			for (int i = 1; i < codeObject->co_consts->size(); i++)
+			{
+				if (codeObject->co_consts->at(i)->value == child->Value->value)
+				{
+					index = i;
+					break;
+				}
+			}
 			ByteCode* byteCode = new ByteCode(OpCodeCommands::LOAD_CONST, index);
 			ByteCodeList->push_back(byteCode);
 		}
 		else if (child->Value->type == Type::Identifier)
 		{
-			auto it = find(codeObject->co_varnames->begin(), codeObject->co_varnames->end(), child->Value);
-			int index = it - codeObject->co_varnames->begin();
+			int index;
+			for (int i = 0; i < codeObject->co_varnames->size(); i++)
+			{
+				if (codeObject->co_varnames->at(i)->value == child->Value->value)
+				{
+					index = i;
+					break;
+				}
+			}
 			ByteCode* byteCode = new ByteCode(OpCodeCommands::LOAD_FAST, index);
 			ByteCodeList->push_back(byteCode);
 		}

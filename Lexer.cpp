@@ -150,7 +150,7 @@ void Lexer::Lex(string CodeLine)
 		else 
 		{
 			Token* token = new Token(Type::Literal, currentToken, indentation, this->line);
-			if (this->TokenList->back()->value != "\"")
+			if (this->TokenList->back()->value == "\"")
 				token->literalType = LiteralType::String;
 			else if (currentToken == "true" || currentToken == "false")
 				token->literalType = LiteralType::Bool;

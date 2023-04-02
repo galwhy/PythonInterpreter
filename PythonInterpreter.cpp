@@ -5,6 +5,7 @@
 #include "Lexer.h"
 #include "Parser.h"
 #include "Compiler.h"
+#include "Interpreter.h"
 
 using namespace std;
 
@@ -24,12 +25,12 @@ int main()
 		{
 			lexer->Lex(codeLine);
 		}
-		lexer->ToString();
+		//lexer->ToString();
 
 		Parser* parser = new Parser();
 		parser->Parse(lexer->GetTokenList());
 		
-		parser->ToString();
+		//parser->ToString();
 
 		parser->CheckSyntax();
 
@@ -39,9 +40,11 @@ int main()
 
 		compiler->Compile(parser->GetSyntaxTree());
 
-		compiler->ToString();
+		//compiler->ToString();
 
-		cout << "";
+		Interpreter* interpreter = Interpreter::getInstance(compiler->GetCodeObject());
+
+		interpreter->Interprete(compiler->GetByteCodeList());
 
 	}
 	my_file.close();

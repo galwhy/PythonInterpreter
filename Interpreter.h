@@ -23,44 +23,48 @@ private:
 	MapCall byteCodeMap;
 	CodeObject* codeObject;
 	int ByteCodePointer;
+	static Interpreter* instance;
+	Interpreter(CodeObject* codeObject);
 
 public:
-	Interpreter(CodeObject* codeObject);
-	
+	static Interpreter* getInstance(CodeObject* codeObject);
+
 	void Interprete(vector<ByteCode*>* byteCodeList);
 
-	void LoadConst(int index);
+	void static LoadConst(int index);
 
-	void LoadFast(int index);
+	void static LoadFast(int index);
 
-	void StoreFast(int index);
+	void static StoreFast(int index);
 
-	void BinaryAdd(int index);
+	void static BinaryAdd(int index);
 
-	void BinarySubtract(int index);
+	void static BinarySubtract(int index);
 
-	void BinaryMultiply(int index);
+	void static BinaryMultiply(int index);
 
-	void BinaryDivide(int index);
+	void static BinaryDivide(int index);
 
-	void LoadGlobal(int index);
+	void static LoadGlobal(int index);
 
-	void CallFunction(int index);
+	void static CallFunction(int index);
 
-	void PopTop(int index);
+	void static PopTop(int index);
 
-	void CompareOp(int index);
+	void static CompareOp(int index);
 
-	void GetIter(int index);
+	void static GetIter(int index);
 
-	void ForIter(int index);
+	void static ForIter(int index);
 
-	void JumpIfFalse(int index);
+	void static JumpIfFalse(int index);
 
-	void JumpIfTrue(int index);
+	void static JumpIfTrue(int index);
 
-	void JumpAbsolute(int index);
+	void static JumpAbsolute(int index);
 
-	void ReturnValue(int index);
+	void static ReturnValue(int index);
+
+	void static Print(vector<Token*> operators);
 
 };

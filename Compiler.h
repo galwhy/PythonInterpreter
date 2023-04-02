@@ -21,5 +21,11 @@ public:
 
 	void BuildCode(Node* node);
 
+	CodeObject* GetCodeObject();
+
+	vector<ByteCode*>* GetByteCodeList();
+
+
+
 	void ToString();
 };
