@@ -30,6 +30,8 @@ public:
 
 	Node* GetLastChild();
 
+	void CheckChild(CodeObject* codeObject, vector<ByteCode*>* ByteCodeList, Node* child);
+
 	virtual void ToByteCode(CodeObject* codeObject, vector<ByteCode*>* ByteCodeList) {};
 };
 

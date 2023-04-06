@@ -134,6 +134,7 @@
     <ClCompile Include="Interpreter.cpp" />
     <ClCompile Include="Lexer.cpp" />
     <ClCompile Include="Node.cpp" />
+    <ClCompile Include="Object.cpp" />
     <ClCompile Include="Parser.cpp" />
     <ClCompile Include="PythonInterpreter.cpp" />
     <ClCompile Include="Token.cpp" />
@@ -146,6 +147,7 @@
     <ClInclude Include="Interpreter.h" />
     <ClInclude Include="Lexer.h" />
     <ClInclude Include="Node.h" />
+    <ClInclude Include="Object.h" />
     <ClInclude Include="Parser.h" />
     <ClInclude Include="Token.h" />
   </ItemGroup>

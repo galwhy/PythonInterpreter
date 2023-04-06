@@ -48,6 +48,42 @@ Node* Node::GetLastChild()
 	return this->Children->at(this->Children->size() - 1);
 }
 
+void Node::CheckChild(CodeObject* codeObject, vector<ByteCode*>* ByteCodeList, Node* child)
+{
+	if (child->Value->type == Type::Literal)
+	{
+		int index;
+		for (int i = 1; i < codeObject->co_consts->size(); i++)
+		{
+			if (codeObject->co_consts->at(i)->value == child->Value->value)
+			{
+				index = i;
+				break;
+			}
+		}
+		ByteCode* byteCode = new ByteCode(OpCodeCommands::LOAD_CONST, index);
+		ByteCodeList->push_back(byteCode);
+	}
+	else if (child->Value->type == Type::Identifier)
+	{
+		int index;
+		for (int i = 0; i < codeObject->co_varnames->size(); i++)
+		{
+			if (codeObject->co_varnames->at(i)->value == child->Value->value)
+			{
+				index = i;
+				break;
+			}
+		}
+		ByteCode* byteCode = new ByteCode(OpCodeCommands::LOAD_FAST, index);
+		ByteCodeList->push_back(byteCode);
+	}
+	else
+	{
+		child->ToByteCode(codeObject, ByteCodeList);
+	}
+}
+
 
 
 RootNode::RootNode() : Node() {};
@@ -131,9 +167,11 @@ OperatorNode::OperatorNode(Token* Value, Node* Parent) : Node(Value, Parent) {};
 
 void OperatorNode::ToByteCode(CodeObject* codeObject, vector<ByteCode*>* ByteCodeList)
 {
+	
 	for (Node* child : *Children)
 	{
-		if (child->Value->type == Type::Literal)
+		CheckChild(codeObject, ByteCodeList, child);
+		/*if (child->Value->type == Type::Literal)
 		{
 			int index;
 			for (int i = 1; i < codeObject->co_consts->size(); i++)
@@ -164,7 +202,7 @@ void OperatorNode::ToByteCode(CodeObject* codeObject, vector<ByteCode*>* ByteCod
 		else
 		{
 			child->ToByteCode(codeObject, ByteCodeList);
-		}
+		}*/
 	}
 	
 	ByteCode* byteCode;
@@ -204,10 +242,11 @@ void GlobalNode::ToByteCode(CodeObject* codeObject, vector<ByteCode*>* ByteCodeL
 	ByteCode* byteCode = new ByteCode(OpCodeCommands::LOAD_GLOBAL, index);
 	ByteCodeList->push_back(byteCode);
 
-
 	for (Node* child : *Children)
 	{
-		if (child->Value->type == Type::Literal)
+		CheckChild(codeObject, ByteCodeList, child);
+
+		/*if (child->Value->type == Type::Literal)
 		{
 			int index;
 			for (int i = 1; i < codeObject->co_consts->size(); i++)
@@ -238,7 +277,7 @@ void GlobalNode::ToByteCode(CodeObject* codeObject, vector<ByteCode*>* ByteCodeL
 		else
 		{
 			child->ToByteCode(codeObject, ByteCodeList);
-		}
+		}*/
 	}
 
 	byteCode = new ByteCode(OpCodeCommands::CALL_FUNCTION, Children->size());
@@ -260,7 +299,9 @@ void CompareNode::ToByteCode(CodeObject* codeObject, vector<ByteCode*>* ByteCode
 {
 	for (Node* child : *Children)
 	{
-		if (child->Value->type == Type::Literal)
+		CheckChild(codeObject, ByteCodeList, child);
+
+		/*if (child->Value->type == Type::Literal)
 		{
 			int index;
 			for (int i = 1; i < codeObject->co_consts->size(); i++)
@@ -291,7 +332,7 @@ void CompareNode::ToByteCode(CodeObject* codeObject, vector<ByteCode*>* ByteCode
 		else
 		{
 			child->ToByteCode(codeObject, ByteCodeList);
-		}
+		}*/
 	}
 
 	auto it = find(codeObject->cmp_op.begin(), codeObject->cmp_op.end(), Value->value);
@@ -314,7 +355,9 @@ void BranchNode::ToByteCode(CodeObject* codeObject, vector<ByteCode*>* ByteCodeL
 
 	for (int i = 0; i < Children->size(); i++)
 	{
-		if (Children->at(i)->Value->type == Type::Literal)
+		CheckChild(codeObject, ByteCodeList, Children->at(i));
+
+		/*if (Children->at(i)->Value->type == Type::Literal)
 		{
 			int index;
 			for (int i = 1; i < codeObject->co_consts->size(); i++)
@@ -345,7 +388,7 @@ void BranchNode::ToByteCode(CodeObject* codeObject, vector<ByteCode*>* ByteCodeL
 		else
 		{
 			Children->at(i)->ToByteCode(codeObject, ByteCodeList);
-		}
+		}*/
 		
 		if (i == 0)
 		{
@@ -399,7 +442,9 @@ void BoolNode::ToByteCode(CodeObject* codeObject, vector<ByteCode*>* ByteCodeLis
 {
 	for (Node* child : *Children)
 	{
-		if (child->Value->type == Type::Literal)
+		CheckChild(codeObject, ByteCodeList, child);
+
+		/*if (child->Value->type == Type::Literal)
 		{
 			int index;
 			for (int i = 1; i < codeObject->co_consts->size(); i++)
@@ -430,7 +475,7 @@ void BoolNode::ToByteCode(CodeObject* codeObject, vector<ByteCode*>* ByteCodeLis
 		else
 		{
 			child->ToByteCode(codeObject, ByteCodeList);
-		}
+		}*/
 
 		ByteCode* byteCode;
 		if (Value->value == "or")
@@ -460,7 +505,9 @@ void ReturnNode::ToByteCode(CodeObject* codeObject, vector<ByteCode*>* ByteCodeL
 {
 	for (Node* child : *Children)
 	{
-		if (child->Value->type == Type::Literal)
+		CheckChild(codeObject, ByteCodeList, child);
+
+		/*if (child->Value->type == Type::Literal)
 		{
 			int index;
 			for (int i = 1; i < codeObject->co_consts->size(); i++)
@@ -491,7 +538,7 @@ void ReturnNode::ToByteCode(CodeObject* codeObject, vector<ByteCode*>* ByteCodeL
 		else
 		{
 			child->ToByteCode(codeObject, ByteCodeList);
-		}
+		}*/
 	}
 	if (Children->size() == 0)
 	{
