@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <string>
+#include "Object.h"
 
 using namespace std;
 
@@ -16,17 +17,11 @@ enum class Type {
 	Branch
 };
 
-enum class LiteralType {
-	String,
-	Int,
-	Bool
-};
-
 class Token
 {
 public:
 	Type type;
-	LiteralType literalType;
+	ObjectType literalType;
 	string value;
 	int indentation;
 	int line;

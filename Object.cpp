@@ -5,22 +5,62 @@
 using namespace std;
 
 
-Object::Object(Type type)
+Object::Object(ObjectType type)
 {
 	this->type = type;
 }
 
-StringObject::StringObject(Type type, string value) : Object(type)
+StringObject::StringObject(ObjectType type, string value) : Object(type)
 {
 	this->value = value;
 }
 
-IntObject::IntObject(Type type, int value) : Object(type)
+string StringObject::Repr()
+{
+	return value;
+}
+
+
+IntObject::IntObject(ObjectType type, int value) : Object(type)
 {
 	this->value = value;
 }
 
-BoolObject::BoolObject(Type type, bool value) : Object(type)
+string IntObject::Repr()
+{
+	return to_string(value);
+}
+
+
+BoolObject::BoolObject(ObjectType type, bool value) : Object(type)
 {
 	this->value = value;
+}
+
+string BoolObject::Repr()
+{
+	return value ? "true" : "false";
+}
+
+
+
+IdentifierObject::IdentifierObject(ObjectType type, string name) : Object(type)
+{
+	this->name = name;
+}
+
+string IdentifierObject::Repr()
+{
+	return name;
+}
+
+
+GlobalObject::GlobalObject(ObjectType type, string name) : Object(type)
+{
+	this->name = name;
+}
+
+string GlobalObject::Repr()
+{
+	return name;
 }

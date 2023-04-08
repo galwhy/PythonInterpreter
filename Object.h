@@ -4,19 +4,23 @@
 
 using namespace std;
 
-enum class Type
+enum class ObjectType
 {
 	String,
 	Int,
-	Bool
+	Bool,
+	Identifier,
+	Global
 };
 
 class Object
 {
 public:
-	Type type;
+	ObjectType type;
 
-	Object(Type type);
+	Object(ObjectType type);
+
+	virtual string Repr() = 0;
 };
 
 class StringObject : public Object
@@ -24,7 +28,9 @@ class StringObject : public Object
 public:
 	string value;
 
-	StringObject(Type type, string value);
+	StringObject(ObjectType type, string value);
+
+	string Repr();
 };
 
 class IntObject : public Object
@@ -32,7 +38,9 @@ class IntObject : public Object
 public:
 	int value;
 
-	IntObject(Type type, int value);
+	IntObject(ObjectType type, int value);
+
+	string Repr();
 };
 
 class BoolObject : public Object
@@ -40,5 +48,27 @@ class BoolObject : public Object
 public:
 	bool value;
 
-	BoolObject(Type type, bool value);
+	BoolObject(ObjectType type, bool value);
+
+	string Repr();
+};
+
+class IdentifierObject : public Object
+{
+public:
+	string name;
+
+	IdentifierObject(ObjectType type , string name);
+
+	string Repr();
+};
+
+class GlobalObject : public Object
+{
+public:
+	string name;
+
+	GlobalObject(ObjectType type, string name);
+
+	string Repr();
 };

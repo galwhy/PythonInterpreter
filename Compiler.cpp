@@ -6,6 +6,7 @@
 #include "AbstractSyntaxTree.h"
 #include "Compiler.h"
 #include "CodeObject.h"
+#include "Object.h"
 
 Compiler::Compiler()
 {
@@ -69,33 +70,49 @@ void Compiler::BuildCode(Node* node)
 		{
 			if (node->Value->type == Type::Identifier)
 			{
-				for (Token* value : *codeObject->co_varnames)
+				for (Object* value : codeObject->co_varnames)
 				{
-					if (value->value == node->Value->value)
+					if (value->Repr() == node->Value->value)
 						doesExist = true;
 				}
 				if (!doesExist)
-					codeObject->co_varnames->push_back(node->Value);
+				{
+					IdentifierObject* obj = new IdentifierObject(ObjectType::Identifier, node->Value->value);
+					codeObject->co_varnames.push_back(obj);
+				}
 			}
 			if (node->Value->type == Type::Keyword)
 			{
-				for (Token* value : *codeObject->co_names)
+				for (Object* value : codeObject->co_names)
 				{
-					if (value->value == node->Value->value)
+					if (value->Repr() == node->Value->value)
 						doesExist = true;
 				}
 				if (!doesExist)
-					codeObject->co_names->push_back(node->Value);
+				{
+					GlobalObject* obj = new GlobalObject(ObjectType::Global, node->Value->value);
+					codeObject->co_names.push_back(obj);
+
+				}
 			}
 			if (node->Value->type == Type::Literal)
 			{
-				for (Token* value : *codeObject->co_consts)
+				for (Object* value : codeObject->co_consts)
 				{
-					if (value != NULL && value->value == node->Value->value)
+					if (value != NULL && value->Repr() == node->Value->value)
 						doesExist = true;
 				}
 				if (!doesExist)
-					codeObject->co_consts->push_back(node->Value);
+				{
+					Object* obj;
+					if (node->Value->literalType == ObjectType::String)
+						obj = new StringObject(ObjectType::String, node->Value->value);
+					else if (node->Value->literalType == ObjectType::Int)
+						obj = new IntObject(ObjectType::Int, stoi(node->Value->value));
+					else if (node->Value->literalType == ObjectType::Bool)
+						obj = new BoolObject(ObjectType::Bool, (node->Value->value == "true"));
+					codeObject->co_consts.push_back(obj);
+				}
 			}
 		}
 		

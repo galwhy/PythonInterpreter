@@ -59,109 +59,116 @@ void Interpreter::Interprete(vector<ByteCode*>* byteCodeList)
 
 void Interpreter::LoadConst(int index)
 {
-	instance->CallStack.push(instance->codeObject->co_consts->at(index));
+	instance->CallStack.push(instance->codeObject->co_consts.at(index));
 }
 
 void Interpreter::LoadFast(int index)
 {
-	instance->CallStack.push(instance->codeObject->co_varnames->at(index));
+	instance->CallStack.push(instance->codeObject->co_varnames.at(index));
 }
 
 void Interpreter::StoreFast(int index)
 {
-	instance->codeObject->co_varnames->at(index) = instance->CallStack.top();
+	instance->codeObject->co_varnames.at(index) = instance->CallStack.top();
 	instance->CallStack.pop();
 }
 
 void Interpreter::BinaryAdd(int index)
 {
-	Token* num1 = instance->CallStack.top();
+	Object* num1 = instance->CallStack.top();
 	instance->CallStack.pop();
-	Token* num2 = instance->CallStack.top();
+	Object* num2 = instance->CallStack.top();
 	instance->CallStack.pop();
-	Token* result;
-	if(num1->literalType == LiteralType::Int && num2->literalType == LiteralType::Int)
-		result = new Token(Type::Literal, to_string(stoi(num1->value) + stoi(num2->value)));
-	else if (num1->literalType == LiteralType::String && num2->literalType == LiteralType::String)
-		result = new Token(Type::Literal, num1->value + num2->value);
+	Object* result;
+	if (num1->type == num2->type)
+	{
+		if (num1->type == ObjectType::Int)
+			result = new IntObject(ObjectType::Int, stoi(num1->Repr()) + stoi(num2->Repr()));
+		else if(num1->type == ObjectType::String)
+			result = new StringObject(ObjectType::String, num1->Repr() + num2->Repr());
+	}
 	else
 	{
 		cout << "Error";
 		return;
 	}
-	result->literalType = LiteralType::Int;
 	instance->CallStack.push(result);
 }
 
 void Interpreter::BinarySubtract(int index)
 {
-	Token* num1 = instance->CallStack.top();
+	Object* num1 = instance->CallStack.top();
 	instance->CallStack.pop();
-	Token* num2 = instance->CallStack.top();
+	Object* num2 = instance->CallStack.top();
 	instance->CallStack.pop();
-	Token* result;
-	if (num1->literalType == LiteralType::Int && num2->literalType == LiteralType::Int)
-		result = new Token(Type::Literal, to_string(stoi(num1->value) - stoi(num2->value)));
+	Object* result;
+	if (num1->type == num2->type)
+	{
+		if (num1->type == ObjectType::Int)
+			result = new IntObject(ObjectType::Int, stoi(num1->Repr()) - stoi(num2->Repr()));
+	}
 	else
 	{
 		cout << "Error";
 		return;
 	}
-	result->literalType = LiteralType::Int;
 	instance->CallStack.push(result);
 }
 
 void Interpreter::BinaryMultiply(int index)
 {
-	Token* num1 = instance->CallStack.top();
+	Object* num1 = instance->CallStack.top();
 	instance->CallStack.pop();
-	Token* num2 = instance->CallStack.top();
+	Object* num2 = instance->CallStack.top();
 	instance->CallStack.pop();
-	Token* result;
-	if (num1->literalType == LiteralType::Int && num2->literalType == LiteralType::Int)
-		result = new Token(Type::Literal, to_string(stoi(num1->value) * stoi(num2->value)));
+	Object* result;
+	if (num1->type == num2->type)
+	{
+		if (num1->type == ObjectType::Int)
+			result = new IntObject(ObjectType::Int, stoi(num1->Repr()) * stoi(num2->Repr()));
+	}
 	else
 	{
 		cout << "Error";
 		return;
 	}
-	result->literalType = LiteralType::Int;
 	instance->CallStack.push(result);
 }
 
 void Interpreter::BinaryDivide(int index)
 {
-	Token* num1 = instance->CallStack.top();
+	Object* num1 = instance->CallStack.top();
 	instance->CallStack.pop();
-	Token* num2 = instance->CallStack.top();
+	Object* num2 = instance->CallStack.top();
 	instance->CallStack.pop();
-	Token* result;
-	if (num1->literalType == LiteralType::Int && num2->literalType == LiteralType::Int)
-		result = new Token(Type::Literal, to_string(stoi(num1->value) / stoi(num2->value)));
+	Object* result;
+	if (num1->type == num2->type)
+	{
+		if (num1->type == ObjectType::Int)
+			result = new IntObject(ObjectType::Int, stoi(num1->Repr()) / stoi(num2->Repr()));
+	}
 	else
 	{
 		cout << "Error";
 		return;
 	}
-	result->literalType = LiteralType::Int;
 	instance->CallStack.push(result);
 }
 
 void Interpreter::LoadGlobal(int index)
 {
-	instance->CallStack.push(instance->codeObject->co_names->at(index));
-
+	instance->CallStack.push(instance->codeObject->co_names.at(index));
 }
 
 void Interpreter::CallFunction(int index)
 {
-	vector<Token*> operators;
+	vector<Object*> operators;
 	for (int i = 0; i < index; i++)
 	{
 		operators.push_back(instance->CallStack.top());
 		instance->CallStack.pop();
 	}
-	if (instance->CallStack.top()->value == "print")
+	if (instance->CallStack.top()->Repr() == "print")
 		Print(operators);
 }
 
@@ -172,18 +179,25 @@ void Interpreter::PopTop(int index)
 
 void Interpreter::CompareOp(int index)
 {
-	Token* value1 = instance->CallStack.top();
+	Object* value1 = instance->CallStack.top();
 	instance->CallStack.pop();
-	Token* value2 = instance->CallStack.top();
+	Object* value2 = instance->CallStack.top();
 	instance->CallStack.pop();
 	string cmpOp = instance->codeObject->cmp_op.at(index);
-	Token* result = NULL;
+	Object* result = NULL;
 	if (cmpOp == ">")
 	{
-		if (value1->literalType == LiteralType::Int && value2->literalType == LiteralType::Int)
-			result = new Token(Type::Literal, stoi(value2->value) > stoi(value1->value) ? "true" : "false");
-		else if (value1->literalType == LiteralType::String && value2->literalType == LiteralType::String)
-			result = new Token(Type::Literal, value2->value > value1->value ? "true" : "false");
+		if (value1->type == value2->type)
+		{
+			if (value1->type == ObjectType::Int)
+			{
+				result = new BoolObject(ObjectType::Bool, stoi(value2->Repr()) > stoi(value1->Repr()));
+			}
+			else if (value1->type == ObjectType::String)
+			{
+				result = new BoolObject(ObjectType::Bool, value2->Repr() > value1->Repr());
+			}
+		}
 		else
 		{
 			cout << "Error";
@@ -192,10 +206,17 @@ void Interpreter::CompareOp(int index)
 	}
 	else if (cmpOp == ">=")
 	{
-		if (value1->literalType == LiteralType::Int && value2->literalType == LiteralType::Int)
-			result = new Token(Type::Literal, stoi(value2->value) >= stoi(value1->value) ? "true" : "false");
-		else if (value1->literalType == LiteralType::String && value2->literalType == LiteralType::String)
-			result = new Token(Type::Literal, value2->value >= value1->value ? "true" : "false");
+		if (value1->type == value2->type)
+		{
+			if (value1->type == ObjectType::Int)
+			{
+				result = new BoolObject(ObjectType::Bool, stoi(value2->Repr()) >= stoi(value1->Repr()));
+			}
+			else if (value1->type == ObjectType::String)
+			{
+				result = new BoolObject(ObjectType::Bool, value2->Repr() >= value1->Repr());
+			}
+		}
 		else
 		{
 			cout << "Error";
@@ -204,10 +225,17 @@ void Interpreter::CompareOp(int index)
 	}
 	else if (cmpOp == "<")
 	{
-		if (value1->literalType == LiteralType::Int && value2->literalType == LiteralType::Int)
-			result = new Token(Type::Literal, stoi(value2->value) < stoi(value1->value) ? "true" : "false");
-		else if (value1->literalType == LiteralType::String && value2->literalType == LiteralType::String)
-			result = new Token(Type::Literal, value2->value < value1->value ? "true" : "false");
+		if (value1->type == value2->type)
+		{
+			if (value1->type == ObjectType::Int)
+			{
+				result = new BoolObject(ObjectType::Bool, stoi(value2->Repr()) < stoi(value1->Repr()));
+			}
+			else if (value1->type == ObjectType::String)
+			{
+				result = new BoolObject(ObjectType::Bool, value2->Repr() < value1->Repr());
+			}
+		}
 		else
 		{
 			cout << "Error";
@@ -216,10 +244,17 @@ void Interpreter::CompareOp(int index)
 	}
 	else if (cmpOp == "<=")
 	{
-		if (value1->literalType == LiteralType::Int && value2->literalType == LiteralType::Int)
-			result = new Token(Type::Literal, stoi(value2->value) <= stoi(value1->value) ? "true" : "false");
-		else if (value1->literalType == LiteralType::String && value2->literalType == LiteralType::String)
-			result = new Token(Type::Literal, value2->value <= value1->value ? "true" : "false");
+		if (value1->type == value2->type)
+		{
+			if (value1->type == ObjectType::Int)
+			{
+				result = new BoolObject(ObjectType::Bool, stoi(value2->Repr()) <= stoi(value1->Repr()));
+			}
+			else if (value1->type == ObjectType::String)
+			{
+				result = new BoolObject(ObjectType::Bool, value2->Repr() <= value1->Repr());
+			}
+		}
 		else
 		{
 			cout << "Error";
@@ -228,10 +263,17 @@ void Interpreter::CompareOp(int index)
 	}
 	else if (cmpOp == "==")
 	{
-		if (value1->literalType == LiteralType::Int && value2->literalType == LiteralType::Int)
-			result = new Token(Type::Literal, stoi(value2->value) == stoi(value1->value) ? "true" : "false");
-		else if (value1->literalType == LiteralType::String && value2->literalType == LiteralType::String)
-			result = new Token(Type::Literal, value2->value == value1->value ? "true" : "false");
+		if (value1->type == value2->type)
+		{
+			if (value1->type == ObjectType::Int)
+			{
+				result = new BoolObject(ObjectType::Bool, stoi(value2->Repr()) == stoi(value1->Repr()));
+			}
+			else if (value1->type == ObjectType::String)
+			{
+				result = new BoolObject(ObjectType::Bool, value2->Repr() == value1->Repr());
+			}
+		}
 		else
 		{
 			cout << "Error";
@@ -240,17 +282,23 @@ void Interpreter::CompareOp(int index)
 	}
 	else if (cmpOp == "!=")
 	{
-		if (value1->literalType == LiteralType::Int && value2->literalType == LiteralType::Int)
-			result = new Token(Type::Literal, stoi(value2->value) != stoi(value1->value) ? "true" : "false");
-		else if (value1->literalType == LiteralType::String && value2->literalType == LiteralType::String)
-			result = new Token(Type::Literal, value2->value != value1->value ? "true" : "false");
+		if (value1->type == value2->type)
+		{
+			if (value1->type == ObjectType::Int)
+			{
+				result = new BoolObject(ObjectType::Bool, stoi(value2->Repr()) != stoi(value1->Repr()));
+			}
+			else if (value1->type == ObjectType::String)
+			{
+				result = new BoolObject(ObjectType::Bool, value2->Repr() != value1->Repr());
+			}
+		}
 		else
 		{
 			cout << "Error";
 			return;
 		}
 	}
-	result->literalType = LiteralType::Bool;
 	instance->CallStack.push(result);
 }
 
@@ -266,17 +314,17 @@ void Interpreter::ForIter(int index)
 
 void Interpreter::JumpIfFalse(int index)
 {
-	Token* value = instance->CallStack.top();
+	Object* value = instance->CallStack.top();
 	instance->CallStack.pop();
-	if (value->value == "false")
+	if (value->Repr() == "false")
 		instance->ByteCodePointer = index/2 - 1;
 }
 
 void Interpreter::JumpIfTrue(int index)
 {
-	Token* value = instance->CallStack.top();
+	Object* value = instance->CallStack.top();
 	instance->CallStack.pop();
-	if (value->value == "true")
+	if (value->Repr() == "true")
 		instance->ByteCodePointer = index / 2 - 1;
 }
 
@@ -290,7 +338,7 @@ void Interpreter::ReturnValue(int index)
 	instance->ByteCodePointer = -2;
 }
 
-void Interpreter::Print(vector<Token*> operators)
+void Interpreter::Print(vector<Object*> operators)
 {
-	cout << operators[0]->value << endl;
+	cout << operators[0]->Repr() << endl;
 }

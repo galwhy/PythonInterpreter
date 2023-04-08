@@ -19,7 +19,7 @@ typedef map<OpCodeCommands, voidFunctionType> MapCall;
 class Interpreter
 {
 private:
-	stack<Token*> CallStack;
+	stack<Object*> CallStack;
 	MapCall byteCodeMap;
 	CodeObject* codeObject;
 	int ByteCodePointer;
@@ -65,6 +65,6 @@ public:
 
 	void static ReturnValue(int index);
 
-	void static Print(vector<Token*> operators);
+	void static Print(vector<Object*> operators);
 
 };

@@ -151,11 +151,11 @@ void Lexer::Lex(string CodeLine)
 		{
 			Token* token = new Token(Type::Literal, currentToken, indentation, this->line);
 			if (this->TokenList->back()->value == "\"")
-				token->literalType = LiteralType::String;
+				token->literalType = ObjectType::String;
 			else if (currentToken == "true" || currentToken == "false")
-				token->literalType = LiteralType::Bool;
+				token->literalType = ObjectType::Bool;
 			else
-				token->literalType = LiteralType::Int;
+				token->literalType = ObjectType::Int;
 			this->TokenList->push_back(token);
 			codeIndex += currentToken.length();
 			continue;

@@ -53,9 +53,9 @@ void Node::CheckChild(CodeObject* codeObject, vector<ByteCode*>* ByteCodeList, N
 	if (child->Value->type == Type::Literal)
 	{
 		int index;
-		for (int i = 1; i < codeObject->co_consts->size(); i++)
+		for (int i = 1; i < codeObject->co_consts.size(); i++)
 		{
-			if (codeObject->co_consts->at(i)->value == child->Value->value)
+			if (codeObject->co_consts.at(i)->Repr()  == child->Value->value)
 			{
 				index = i;
 				break;
@@ -67,9 +67,9 @@ void Node::CheckChild(CodeObject* codeObject, vector<ByteCode*>* ByteCodeList, N
 	else if (child->Value->type == Type::Identifier)
 	{
 		int index;
-		for (int i = 0; i < codeObject->co_varnames->size(); i++)
+		for (int i = 0; i < codeObject->co_varnames.size(); i++)
 		{
-			if (codeObject->co_varnames->at(i)->value == child->Value->value)
+			if (codeObject->co_varnames.at(i)->Repr() == child->Value->value)
 			{
 				index = i;
 				break;
@@ -110,44 +110,45 @@ EqualNode::EqualNode(Token* Value, Node* Parent) : Node(Value, Parent) {};
 
 void EqualNode::ToByteCode(CodeObject* codeObject, vector<ByteCode*>* ByteCodeList)
 {
-	
-	if (Children->at(1)->Value->type == Type::Literal)
-	{
-		int index;
-		for (int i = 1; i < codeObject->co_consts->size(); i++)
-		{
-			if (codeObject->co_consts->at(i)->value == Children->at(1)->Value->value)
-			{
-				index = i;
-				break;
-			}
-		}
-		ByteCode* byteCode = new ByteCode(OpCodeCommands::LOAD_CONST, index);
-		ByteCodeList->push_back(byteCode);
-	}
-	else if (Children->at(1)->Value->type == Type::Identifier)
-	{
-		int index;
-		for (int i = 0; i < codeObject->co_varnames->size(); i++)
-		{
-			if (codeObject->co_varnames->at(i)->value == Children->at(1)->Value->value)
-			{
-				index = i;
-				break;
-			}
-		}
-		ByteCode* byteCode = new ByteCode(OpCodeCommands::LOAD_FAST, index);
-		ByteCodeList->push_back(byteCode);
-	}
-	else
-	{
-		Children->at(1)->ToByteCode(codeObject, ByteCodeList);
-	}
+	CheckChild(codeObject, ByteCodeList, Children->at(1));
+
+	//if (Children->at(1)->Value->type == Type::Literal)
+	//{
+	//	int index;
+	//	for (int i = 1; i < codeObject->co_consts->size(); i++)
+	//	{
+	//		if (codeObject->co_consts->at(i)->value == Children->at(1)->Value->value)
+	//		{
+	//			index = i;
+	//			break;
+	//		}
+	//	}
+	//	ByteCode* byteCode = new ByteCode(OpCodeCommands::LOAD_CONST, index);
+	//	ByteCodeList->push_back(byteCode);
+	//}
+	//else if (Children->at(1)->Value->type == Type::Identifier)
+	//{
+	//	int index;
+	//	for (int i = 0; i < codeObject->co_varnames->size(); i++)
+	//	{
+	//		if (codeObject->co_varnames->at(i)->value == Children->at(1)->Value->value)
+	//		{
+	//			index = i;
+	//			break;
+	//		}
+	//	}
+	//	ByteCode* byteCode = new ByteCode(OpCodeCommands::LOAD_FAST, index);
+	//	ByteCodeList->push_back(byteCode);
+	//}
+	//else
+	//{
+	//	Children->at(1)->ToByteCode(codeObject, ByteCodeList);
+	//}
 
 	int index;
-	for (int i = 0; i < codeObject->co_varnames->size(); i++)
+	for (int i = 0; i < codeObject->co_varnames.size(); i++)
 	{
-		if (codeObject->co_varnames->at(i)->value == Children->at(0)->Value->value)
+		if (codeObject->co_varnames.at(i)->Repr() == Children->at(0)->Value->value)
 		{
 			index = i;
 			break;
@@ -231,9 +232,9 @@ GlobalNode::GlobalNode(Token* Value, Node* Parent) : Node(Value, Parent) {};
 void GlobalNode::ToByteCode(CodeObject* codeObject, vector<ByteCode*>* ByteCodeList)
 {
 	int index;
-	for (int i = 0; i < codeObject->co_names->size(); i++)
+	for (int i = 0; i < codeObject->co_names.size(); i++)
 	{
-		if (codeObject->co_names->at(i)->value == Value->value)
+		if (codeObject->co_names.at(i)->Repr() == Value->value)
 		{
 			index = i;
 			break;
