@@ -46,9 +46,14 @@ void Lexer::Lex(string CodeLine)
 
 	while (codeIndex < CodeLine.length())
 	{
+		string currentToken;
 		identifiedToken = false;
 		int whitespace = CodeLine.find(" ", codeIndex);
-		string currentToken = CodeLine.substr(codeIndex, whitespace - codeIndex);
+		if (CodeLine[codeIndex] == '[')
+		{
+			whitespace = CodeLine.find("]", codeIndex) + 1;
+		}
+		currentToken = CodeLine.substr(codeIndex, whitespace - codeIndex);
 		if (currentToken.length() == 0)
 		{
 			codeIndex++;
@@ -133,7 +138,7 @@ void Lexer::Lex(string CodeLine)
 		
 		for (int i = 1; i < currentToken.length(); i++)
 		{
-			if (!(isalnum(currentToken[i]) || currentToken[i] == '_'))
+			if (!(isalnum(currentToken[i]) || currentToken[i] == '_' || currentToken[i] == ',' || currentToken[i] == ' ' || currentToken[i] == ']'))
 			{
 				currentToken = currentToken.substr(0, i);
 				break;
@@ -154,6 +159,8 @@ void Lexer::Lex(string CodeLine)
 				token->literalType = ObjectType::String;
 			else if (currentToken == "true" || currentToken == "false")
 				token->literalType = ObjectType::Bool;
+			else if (currentToken[0] == '[')
+				token->literalType = ObjectType::List;
 			else
 				token->literalType = ObjectType::Int;
 			this->TokenList->push_back(token);

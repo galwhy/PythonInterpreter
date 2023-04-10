@@ -105,7 +105,47 @@ void Compiler::BuildCode(Node* node)
 				if (!doesExist)
 				{
 					Object* obj;
-					if (node->Value->literalType == ObjectType::String)
+					if (node->Value->literalType == ObjectType::List)
+					{
+						string value = node->Value->value;
+						int index = 1;
+						int delimeter = 0;
+						vector<Object*>* list = new vector<Object*>();
+						while (index < value.size() - 1)
+						{
+							int delimeter = value.find(",", index);
+							if (delimeter == -1)
+								delimeter = value.length() - 1;
+							while (value[index] == ' ')
+							{
+								index++;
+							}
+							string listValue = value.substr(index, delimeter - index);
+							if (listValue.length() == 0)
+							{
+								index++;
+								continue;
+							}
+							Object* obj;
+							if (listValue[0] == '"')
+							{
+								obj = new StringObject(ObjectType::String, listValue.substr(1, listValue.size() - 1));
+							}
+							else if (listValue == "true" || listValue == "false")
+							{
+								obj = new BoolObject(ObjectType::Bool, (listValue == "true"));
+							}
+							else
+							{
+								obj = new IntObject(ObjectType::Int, stoi(listValue));
+							}
+							list->push_back(obj);
+							index += listValue.length();
+						}
+						obj = new ListObject(ObjectType::List, list);
+
+					}
+					else if (node->Value->literalType == ObjectType::String)
 						obj = new StringObject(ObjectType::String, node->Value->value);
 					else if (node->Value->literalType == ObjectType::Int)
 						obj = new IntObject(ObjectType::Int, stoi(node->Value->value));

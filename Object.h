@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <string>
+#include <vector>
 
 using namespace std;
 
@@ -9,6 +10,7 @@ enum class ObjectType
 	String,
 	Int,
 	Bool,
+	List,
 	Identifier,
 	Global
 };
@@ -49,6 +51,16 @@ public:
 	bool value;
 
 	BoolObject(ObjectType type, bool value);
+
+	string Repr();
+};
+
+class ListObject : public Object
+{
+public:
+	vector<Object*>* list;
+
+	ListObject(ObjectType type, vector<Object*>* list);
 
 	string Repr();
 };

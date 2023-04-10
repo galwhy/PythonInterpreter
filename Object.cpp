@@ -1,5 +1,7 @@
 #include <iostream>
 #include <string>
+#include <vector>
+#include <sstream>
 #include "Object.h"
 
 using namespace std;
@@ -42,6 +44,25 @@ string BoolObject::Repr()
 	return value ? "true" : "false";
 }
 
+
+ListObject::ListObject(ObjectType type, vector<Object*>* list) : Object(type)
+{
+	this->list = list;
+}
+
+string ListObject::Repr()
+{
+	stringstream value;
+	value << "[";
+	for (int i = 0; i < list->size(); i++)
+	{
+		value << list->at(i)->Repr();
+		if (i < list->size() - 1)
+			value << ", ";
+	}
+	value << "]";
+	return value.str();
+}
 
 
 IdentifierObject::IdentifierObject(ObjectType type, string name) : Object(type)
