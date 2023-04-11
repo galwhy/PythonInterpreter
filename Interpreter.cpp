@@ -7,6 +7,7 @@
 #include "AbstractSyntaxTree.h"
 #include "CodeObject.h"
 #include "Interpreter.h"
+#include "ObjectIterator.h"
 
 Interpreter* Interpreter::instance;
 
@@ -79,8 +80,9 @@ void Interpreter::BinaryAdd(int index)
 	instance->CallStack.pop();
 	Object* num2 = instance->CallStack.top();
 	instance->CallStack.pop();
-	Object* result;
-	if (num1->type == num2->type)
+	Object* result = num2->Add(num1);
+
+	/*if (num1->type == num2->type)
 	{
 		if (num1->type == ObjectType::Int)
 			result = new IntObject(ObjectType::Int, stoi(num1->Repr()) + stoi(num2->Repr()));
@@ -91,7 +93,7 @@ void Interpreter::BinaryAdd(int index)
 	{
 		cout << "Error";
 		return;
-	}
+	}*/
 	instance->CallStack.push(result);
 }
 
@@ -101,8 +103,8 @@ void Interpreter::BinarySubtract(int index)
 	instance->CallStack.pop();
 	Object* num2 = instance->CallStack.top();
 	instance->CallStack.pop();
-	Object* result;
-	if (num1->type == num2->type)
+	Object* result = num2->subtract(num1);;
+	/*if (num1->type == num2->type)
 	{
 		if (num1->type == ObjectType::Int)
 			result = new IntObject(ObjectType::Int, stoi(num1->Repr()) - stoi(num2->Repr()));
@@ -111,7 +113,7 @@ void Interpreter::BinarySubtract(int index)
 	{
 		cout << "Error";
 		return;
-	}
+	}*/
 	instance->CallStack.push(result);
 }
 
@@ -121,8 +123,8 @@ void Interpreter::BinaryMultiply(int index)
 	instance->CallStack.pop();
 	Object* num2 = instance->CallStack.top();
 	instance->CallStack.pop();
-	Object* result;
-	if (num1->type == num2->type)
+	Object* result = num2->multiply(num1);;
+	/*if (num1->type == num2->type)
 	{
 		if (num1->type == ObjectType::Int)
 			result = new IntObject(ObjectType::Int, stoi(num1->Repr()) * stoi(num2->Repr()));
@@ -131,7 +133,7 @@ void Interpreter::BinaryMultiply(int index)
 	{
 		cout << "Error";
 		return;
-	}
+	}*/
 	instance->CallStack.push(result);
 }
 
@@ -141,8 +143,8 @@ void Interpreter::BinaryDivide(int index)
 	instance->CallStack.pop();
 	Object* num2 = instance->CallStack.top();
 	instance->CallStack.pop();
-	Object* result;
-	if (num1->type == num2->type)
+	Object* result = num2->divide(num1);;
+	/*if (num1->type == num2->type)
 	{
 		if (num1->type == ObjectType::Int)
 			result = new IntObject(ObjectType::Int, stoi(num1->Repr()) / stoi(num2->Repr()));
@@ -151,7 +153,7 @@ void Interpreter::BinaryDivide(int index)
 	{
 		cout << "Error";
 		return;
-	}
+	}*/
 	instance->CallStack.push(result);
 }
 
@@ -187,7 +189,8 @@ void Interpreter::CompareOp(int index)
 	Object* result = NULL;
 	if (cmpOp == ">")
 	{
-		if (value1->type == value2->type)
+		result = value2->IsBigger(value1);
+		/*if (value1->type == value2->type)
 		{
 			if (value1->type == ObjectType::Int)
 			{
@@ -202,11 +205,12 @@ void Interpreter::CompareOp(int index)
 		{
 			cout << "Error";
 			return;
-		}
+		}*/
 	}
 	else if (cmpOp == ">=")
 	{
-		if (value1->type == value2->type)
+		result = new BoolObject(value2->IsBigger(value1)->Repr() == "true" || value2->IsEqual(value1)->Repr() == "true");
+		/*if (value1->type == value2->type)
 		{
 			if (value1->type == ObjectType::Int)
 			{
@@ -221,11 +225,12 @@ void Interpreter::CompareOp(int index)
 		{
 			cout << "Error";
 			return;
-		}
+		}*/
 	}
 	else if (cmpOp == "<")
 	{
-		if (value1->type == value2->type)
+		result = value2->IsSmaller(value1);
+		/*if (value1->type == value2->type)
 		{
 			if (value1->type == ObjectType::Int)
 			{
@@ -240,30 +245,33 @@ void Interpreter::CompareOp(int index)
 		{
 			cout << "Error";
 			return;
-		}
+		}*/
 	}
 	else if (cmpOp == "<=")
 	{
-		if (value1->type == value2->type)
-		{
-			if (value1->type == ObjectType::Int)
-			{
-				result = new BoolObject(ObjectType::Bool, stoi(value2->Repr()) <= stoi(value1->Repr()));
-			}
-			else if (value1->type == ObjectType::String)
-			{
-				result = new BoolObject(ObjectType::Bool, value2->Repr() <= value1->Repr());
-			}
-		}
-		else
-		{
-			cout << "Error";
-			return;
-		}
+		result = new BoolObject(value2->IsSmaller(value1)->Repr() == "true" || value2->IsEqual(value1)->Repr() == "true");
+
+		//if (value1->type == value2->type)
+		//{
+		//	if (value1->type == ObjectType::Int)
+		//	{
+		//		result = new BoolObject(ObjectType::Bool, stoi(value2->Repr()) <= stoi(value1->Repr()));
+		//	}
+		//	else if (value1->type == ObjectType::String)
+		//	{
+		//		result = new BoolObject(ObjectType::Bool, value2->Repr() <= value1->Repr());
+		//	}
+		//}
+		//else
+		//{
+		//	cout << "Error";
+		//	return;
+		//}
 	}
 	else if (cmpOp == "==")
 	{
-		if (value1->type == value2->type)
+		result = value2->IsEqual(value1);
+	/*	if (value1->type == value2->type)
 		{
 			if (value1->type == ObjectType::Int)
 			{
@@ -278,11 +286,13 @@ void Interpreter::CompareOp(int index)
 		{
 			cout << "Error";
 			return;
-		}
+		}*/
 	}
 	else if (cmpOp == "!=")
 	{
-		if (value1->type == value2->type)
+	result = new BoolObject(value2->IsEqual(value1)->Repr() == "false");
+
+		/*if (value1->type == value2->type)
 		{
 			if (value1->type == ObjectType::Int)
 			{
@@ -297,19 +307,38 @@ void Interpreter::CompareOp(int index)
 		{
 			cout << "Error";
 			return;
-		}
+		}*/
 	}
 	instance->CallStack.push(result);
 }
 
 void Interpreter::GetIter(int index)
 {
+	Object* value = instance->CallStack.top();
+	instance->CallStack.pop();
 
+	instance->CallStack.push(value->GetIterator());
 }
 
 void Interpreter::ForIter(int index)
 {
+	Object* value = instance->CallStack.top();
+	if (value->type == ObjectType::Iterator)
+	{
+		ObjectIterator* rhs = (ObjectIterator*)value;
+		Object* newValue = rhs->GetCurrent();
+		rhs->Next();
 
+		if (newValue == NULL)
+		{
+			instance->CallStack.pop();
+			instance->ByteCodePointer = index/2;
+		}
+		else
+		{
+			instance->CallStack.push(newValue);
+		}
+	}
 }
 
 void Interpreter::JumpIfFalse(int index)

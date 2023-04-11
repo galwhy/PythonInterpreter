@@ -234,6 +234,15 @@ void Parser::Parse(vector<Token*>* TokenList)
 				operatorCount = 0;
 			}*/
 		}
+		else if (currentToken->type == Type::IteratorOperator)
+		{
+			numericCheck = false;
+			if (currentToken->value == "in")
+			{
+				IteratorNode* newTree = new IteratorNode(currentToken, currentTree);
+				currentTree->InsertChild(newTree);
+			}
+		}
 		else if (currentToken->type == Type::BoolOperator)
 		{
 			conditionCheck = true;

@@ -15,7 +15,8 @@ Lexer::Lexer()
 
 	this->NumOperators = {"+", "-", "/", "*"};
 	this->BoolOperators = {"or", "and"};
-	this->EqualOperators = { "==", "<=", ">=", "+=", "-=", "*=", "/=", "=" ,"<", ">" };
+	this->EqualOperators = { "==", "<=", ">=", "+=", "-=", "*=", "/=", "=" ,"<", ">"};
+	this->IteratorOperators = { "in" };
 	this->KeyWords = {"print", "return"};
 	this->Branches = { "elif", "if", "else", "while", "for"};
 	this->Delimiters = { ":", "(", ")" , "\""};
@@ -92,6 +93,18 @@ void Lexer::Lex(string CodeLine)
 			if (currentToken.find(op) == 0)
 			{
 				Token* token = new Token(Type::EqualOperator, op, indentation, this->line);
+				this->TokenList->push_back(token);
+				codeIndex += op.length();
+				identifiedToken = true;
+				break;
+			}
+		}
+
+		for (string op : this->IteratorOperators) //Check for operators
+		{
+			if (currentToken.find(op) == 0)
+			{
+				Token* token = new Token(Type::IteratorOperator, op, indentation, this->line);
 				this->TokenList->push_back(token);
 				codeIndex += op.length();
 				identifiedToken = true;

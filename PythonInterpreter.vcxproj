@@ -135,6 +135,7 @@
     <ClCompile Include="Lexer.cpp" />
     <ClCompile Include="Node.cpp" />
     <ClCompile Include="Object.cpp" />
+    <ClCompile Include="ObjectIterator.cpp" />
     <ClCompile Include="Parser.cpp" />
     <ClCompile Include="PythonInterpreter.cpp" />
     <ClCompile Include="Token.cpp" />

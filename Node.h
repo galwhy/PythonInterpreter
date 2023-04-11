@@ -59,6 +59,18 @@ public:
 	void ToByteCode(CodeObject* codeObject, vector<ByteCode*>* ByteCodeList);
 };
 
+class IteratorNode : public Node
+{
+public:
+	IteratorNode();
+
+	IteratorNode(Token* Value);
+
+	IteratorNode(Token* Value, Node* Parent);
+
+	void ToByteCode(CodeObject* codeObject, vector<ByteCode*>* ByteCodeList);
+};
+
 class OperatorNode : public Node
 {
 public:

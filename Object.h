@@ -12,8 +12,11 @@ enum class ObjectType
 	Bool,
 	List,
 	Identifier,
-	Global
+	Global,
+	Iterator
 };
+
+class ObjectIterator;
 
 class Object
 {
@@ -22,7 +25,23 @@ public:
 
 	Object(ObjectType type);
 
-	virtual string Repr() = 0;
+	virtual string Repr();
+
+	virtual Object* Add(Object* obj);
+
+	virtual Object* subtract(Object* obj);
+
+	virtual Object* multiply(Object* obj);
+
+	virtual Object* divide(Object* obj);
+
+	virtual Object* IsEqual(Object* obj);
+
+	virtual Object* IsBigger(Object* obj);
+
+	virtual Object* IsSmaller(Object* obj);
+
+	virtual Object* GetIterator();
 };
 
 class StringObject : public Object
@@ -30,9 +49,17 @@ class StringObject : public Object
 public:
 	string value;
 
-	StringObject(ObjectType type, string value);
+	StringObject(string value);
 
-	string Repr();
+	virtual Object* Add(Object* obj);
+
+	virtual	Object* IsEqual(Object* obj);
+
+	virtual	Object* IsBigger(Object* obj);
+
+	virtual	Object* IsSmaller(Object* obj);
+
+	virtual	string Repr();
 };
 
 class IntObject : public Object
@@ -40,9 +67,23 @@ class IntObject : public Object
 public:
 	int value;
 
-	IntObject(ObjectType type, int value);
+	IntObject(int value);
 
-	string Repr();
+	virtual Object* Add(Object* obj);
+
+	virtual	Object* subtract(Object* obj);
+
+	virtual	Object* multiply(Object* obj);
+
+	virtual	Object* divide(Object* obj);
+
+	virtual	Object* IsEqual(Object* obj);
+
+	virtual	Object* IsBigger(Object* obj);
+
+	virtual	Object* IsSmaller(Object* obj);
+
+	virtual	string Repr();
 };
 
 class BoolObject : public Object
@@ -50,9 +91,11 @@ class BoolObject : public Object
 public:
 	bool value;
 
-	BoolObject(ObjectType type, bool value);
+	BoolObject(bool value);
 
-	string Repr();
+	virtual	Object* IsEqual(Object* obj);
+
+	virtual	string Repr();
 };
 
 class ListObject : public Object
@@ -60,9 +103,11 @@ class ListObject : public Object
 public:
 	vector<Object*>* list;
 
-	ListObject(ObjectType type, vector<Object*>* list);
+	ListObject(vector<Object*>* list);
 
-	string Repr();
+	virtual Object* GetIterator();
+
+	virtual	string Repr();
 };
 
 class IdentifierObject : public Object
@@ -70,9 +115,9 @@ class IdentifierObject : public Object
 public:
 	string name;
 
-	IdentifierObject(ObjectType type , string name);
+	IdentifierObject(string name);
 
-	string Repr();
+	virtual	string Repr();
 };
 
 class GlobalObject : public Object
@@ -80,7 +125,7 @@ class GlobalObject : public Object
 public:
 	string name;
 
-	GlobalObject(ObjectType type, string name);
+	GlobalObject(string name);
 
-	string Repr();
+	virtual	string Repr();
 };

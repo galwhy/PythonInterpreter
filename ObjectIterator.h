@@ -4,10 +4,12 @@
 
 using namespace std;
 
-class ObjectIterator
+class ObjectIterator : public Object
 {
 public:
-	virtual ObjectIterator* Next() const = 0;
+	ObjectIterator();
+
+	virtual void Next() = 0;
 
 	virtual Object* GetCurrent() const = 0;
 
@@ -16,11 +18,12 @@ public:
 class ListIterator : public ObjectIterator
 {
 	vector<Object*>::iterator iter;
+	vector<Object*>* list;
 
 public:
-	ListIterator();
+	ListIterator(ListObject* list);
 
-	ObjectIterator* Next() const;
+	virtual	void Next();
 
-	Object* GetCurrent() const;
+	virtual	Object* GetCurrent() const;
 };

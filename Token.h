@@ -9,6 +9,7 @@ enum class Type {
 	NumOperator,
 	BoolOperator,
 	EqualOperator,
+	IteratorOperator,
 	Literal,
 	Identifier,
 	Keyword,

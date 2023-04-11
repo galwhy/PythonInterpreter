@@ -100,6 +100,34 @@ void RootNode::ToByteCode(CodeObject* codeObject, vector<ByteCode*>* ByteCodeLis
 	}
 }
 
+IteratorNode::IteratorNode() : Node() {};
+
+IteratorNode::IteratorNode(Token* Value) : Node(Value) {};
+
+IteratorNode::IteratorNode(Token* Value, Node* Parent) : Node(Value, Parent) {};
+
+void IteratorNode::ToByteCode(CodeObject* codeObject, vector<ByteCode*>* ByteCodeList)
+{
+	CheckChild(codeObject, ByteCodeList, Children->at(1));
+
+	ByteCode* byteCode = new ByteCode(OpCodeCommands::GET_ITER);
+	ByteCodeList->push_back(byteCode);
+	byteCode = new ByteCode(OpCodeCommands::FOR_ITER);
+	ByteCodeList->push_back(byteCode);
+
+	int index;
+	for (int i = 0; i < codeObject->co_varnames.size(); i++)
+	{
+		if (codeObject->co_varnames.at(i)->Repr() == Children->at(0)->Value->value)
+		{
+			index = i;
+			break;
+		}
+	}
+	byteCode = new ByteCode(OpCodeCommands::STORE_FAST, index);
+	ByteCodeList->push_back(byteCode);
+}
+
 
 
 EqualNode::EqualNode() : Node() {};
@@ -393,15 +421,7 @@ void BranchNode::ToByteCode(CodeObject* codeObject, vector<ByteCode*>* ByteCodeL
 		
 		if (i == 0)
 		{
-			if (Value->value == "for")
-			{
-				ByteCode* byteCode = new ByteCode(OpCodeCommands::GET_ITER);
-				ByteCodeList->push_back(byteCode);
-				byteCode = new ByteCode(OpCodeCommands::FOR_ITER);
-				ByteCodeList->push_back(byteCode);
-				startLine = ByteCodeList->size() * 2;
-			}
-			else
+			if(Value->value != "for")
 			{
 				if (Children->at(0)->Value->value != "or" && Children->at(0)->Value->value != "and")
 				{
@@ -418,7 +438,7 @@ void BranchNode::ToByteCode(CodeObject* codeObject, vector<ByteCode*>* ByteCodeL
 		{
 			ByteCodeList->at(startLine)->OperandArg = (ByteCodeList->size()) * 2;
 		}
-		ByteCode* byteCode = new ByteCode(OpCodeCommands::JUMP_ABSOLUTE, startLine);
+		ByteCode* byteCode = new ByteCode(OpCodeCommands::JUMP_ABSOLUTE, startLine*2);
 		ByteCodeList->push_back(byteCode);
 	}
 	for (int i = startLine/2; i < ByteCodeList->size(); i++)

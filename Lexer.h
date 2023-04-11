@@ -14,6 +14,7 @@ class Lexer
 	vector<string> NumOperators;
 	vector<string> BoolOperators;
 	vector<string> EqualOperators;
+	vector<string> IteratorOperators;
 	vector<string> KeyWords;
 	vector<string> Branches;
 	vector<string> Delimiters;
