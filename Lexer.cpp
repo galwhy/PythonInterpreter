@@ -10,7 +10,7 @@ int Lexer::line = 0;
 
 Lexer::Lexer()
 {
-	this->TokenList = new vector<Token*>();
+	//this->TokenList = new vector<Token*>();
 
 
 	this->NumOperators = {"+", "-", "/", "*"};
@@ -68,7 +68,7 @@ void Lexer::Lex(string CodeLine)
 				 
 				Token* token = new Token(Type::NumOperator, op, indentation, this->line);
 				if (op == "*" || op == "/") token->priority = 1;
-				this->TokenList->push_back(token);
+				this->TokenList.push_back(token);
 				codeIndex += op.length();
 				identifiedToken = true;
 				break;
@@ -81,7 +81,7 @@ void Lexer::Lex(string CodeLine)
 			{
 				Token* token = new Token(Type::BoolOperator, op, indentation, this->line);
 				if (op == "and") token->priority = 1;
-				this->TokenList->push_back(token);
+				this->TokenList.push_back(token);
 				codeIndex += op.length();
 				identifiedToken = true;
 				break;
@@ -93,7 +93,7 @@ void Lexer::Lex(string CodeLine)
 			if (currentToken.find(op) == 0)
 			{
 				Token* token = new Token(Type::EqualOperator, op, indentation, this->line);
-				this->TokenList->push_back(token);
+				this->TokenList.push_back(token);
 				codeIndex += op.length();
 				identifiedToken = true;
 				break;
@@ -105,7 +105,7 @@ void Lexer::Lex(string CodeLine)
 			if (currentToken.find(op) == 0)
 			{
 				Token* token = new Token(Type::IteratorOperator, op, indentation, this->line);
-				this->TokenList->push_back(token);
+				this->TokenList.push_back(token);
 				codeIndex += op.length();
 				identifiedToken = true;
 				break;
@@ -117,7 +117,7 @@ void Lexer::Lex(string CodeLine)
 			if (currentToken.find(delimiter) == 0)
 			{
 				Token* token = new Token(Type::Delimiter, delimiter, indentation, this->line);
-				this->TokenList->push_back(token);
+				this->TokenList.push_back(token);
 				codeIndex += delimiter.length();
 				identifiedToken = true;
 				break;
@@ -129,7 +129,7 @@ void Lexer::Lex(string CodeLine)
 			if (currentToken.find(keyword) == 0)
 			{
 				Token* token = new Token(Type::Keyword, keyword, indentation, this->line);
-				this->TokenList->push_back(token);
+				this->TokenList.push_back(token);
 				codeIndex += keyword.length();
 				identifiedToken = true;
 				break;
@@ -141,7 +141,7 @@ void Lexer::Lex(string CodeLine)
 			if (currentToken.find(keyword) == 0)
 			{
 				Token* token = new Token(Type::Branch, keyword, indentation, this->line);
-				this->TokenList->push_back(token);
+				this->TokenList.push_back(token);
 				codeIndex += keyword.length();
 				identifiedToken = true;
 				break;
@@ -157,18 +157,18 @@ void Lexer::Lex(string CodeLine)
 				break;
 			}
 		}
-		if ((isalpha(currentToken[0]) || currentToken[0] == '_') && (this->TokenList->empty() || this->TokenList->back()->value != "\""))
+		if ((isalpha(currentToken[0]) || currentToken[0] == '_') && (this->TokenList.empty() || this->TokenList.back()->value != "\""))
 		{
 			
 			Token* token = new Token(Type::Identifier, currentToken, indentation, this->line);
-			this->TokenList->push_back(token);
+			this->TokenList.push_back(token);
 			codeIndex += currentToken.length();
 			continue;
 		}
 		else 
 		{
 			Token* token = new Token(Type::Literal, currentToken, indentation, this->line);
-			if (this->TokenList->back()->value == "\"")
+			if (this->TokenList.back()->value == "\"")
 				token->literalType = ObjectType::String;
 			else if (currentToken == "true" || currentToken == "false")
 				token->literalType = ObjectType::Bool;
@@ -176,26 +176,26 @@ void Lexer::Lex(string CodeLine)
 				token->literalType = ObjectType::List;
 			else
 				token->literalType = ObjectType::Int;
-			this->TokenList->push_back(token);
+			this->TokenList.push_back(token);
 			codeIndex += currentToken.length();
 			continue;
 		}
 	}
 
 	Token* token = new Token(Type::EndLine, "\n", indentation, this->line);
-	this->TokenList->push_back(token);
+	this->TokenList.push_back(token);
 }
 
-vector<Token*>* Lexer::GetTokenList()
+vector<Token*> Lexer::GetTokenList()
 {
 	return this->TokenList;
 }
 
 void Lexer::ToString()
 {
-	for (int i = 0; i < this->TokenList->size(); i++)
+	for (int i = 0; i < this->TokenList.size(); i++)
 	{
-		Token* currentToken = this->TokenList->at(i);
+		Token* currentToken = this->TokenList.at(i);
 		if (currentToken->type == Type::NumOperator)
 		{
 			cout << "NumOperator: " << currentToken->value << endl;

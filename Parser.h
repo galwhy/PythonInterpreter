@@ -6,14 +6,14 @@
 
 class Parser
 {
-	AbstractSyntaxTree* syntaxTree;
+	AbstractSyntaxTree syntaxTree;
 
 	vector<string> ConditionOperators;
 
 public:
 	Parser();
 
-	void Parse(vector<Token*>* TokenList);
+	void Parse(vector<Token*> TokenList);
 
 	int CheckSyntax(Node* node);
 

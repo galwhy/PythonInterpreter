@@ -17,6 +17,8 @@ public:
 
 class ListIterator : public ObjectIterator
 {
+	std::iterator<std::forward_iterator_tag, Object*> iterr;
+
 	vector<Object*>::iterator iter;
 	vector<Object*>* list;
 

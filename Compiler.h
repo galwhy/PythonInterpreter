@@ -10,13 +10,11 @@
 class Compiler
 {
 private:
-	CodeObject* codeObject;
-	vector<ByteCode*>* ByteCodeList;
+	CodeObject codeObject;
+	vector<ByteCode*> ByteCodeList;
 	
 
 public:
-	Compiler();
-
 	void Compile(AbstractSyntaxTree* syntaxTree);
 
 	void BuildCode(Node* node);

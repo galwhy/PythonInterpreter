@@ -12,12 +12,10 @@ using namespace std;
 
 Parser::Parser()
 {
-	this->syntaxTree = new AbstractSyntaxTree();
-
 	this->ConditionOperators = { "==", "!=", ">=", "<=", ">", "<" };
 }
 
-void Parser::Parse(vector<Token*>* TokenList)
+void Parser::Parse(vector<Token*> TokenList)
 {
 	int lastIndentation = 0;
 	int operatorCount = 0;
@@ -36,11 +34,11 @@ void Parser::Parse(vector<Token*>* TokenList)
 	vector<Node*>* conditionOutputStack = new vector<Node*>();
 	
 
-	Node* currentTree = this->syntaxTree->Root;
+	Node* currentTree = this->syntaxTree.Root;
 
-	for (int i = 0; i < TokenList->size(); i++)
+	for (int i = 0; i < TokenList.size(); i++)
 	{
-		Token* currentToken = TokenList->at(i);
+		Token* currentToken = TokenList.at(i);
 		if (lastIndentation > currentToken->indentation)
 		{
 			for (int j = currentToken->indentation; j < lastIndentation; j++)
@@ -352,11 +350,11 @@ void Parser::Parse(vector<Token*>* TokenList)
 		}
 		lastIndentation = currentToken->indentation;
 	}
-	if (syntaxTree->Root->GetLastChild()->Value->value != "return")
+	if (syntaxTree.Root->GetLastChild()->Value->value != "return")
 	{
 		Token* currentToken = new Token(Type::Keyword, "return");
 		ReturnNode* newTree = new ReturnNode(currentToken, currentTree);
-		syntaxTree->Root->InsertChild(newTree);
+		syntaxTree.Root->InsertChild(newTree);
 	}
 }
 
@@ -386,12 +384,12 @@ int Parser::CheckSyntax(Node* node)
 
 void Parser::CheckSyntax()
 {
-	CheckSyntax(this->syntaxTree->Root);
+	CheckSyntax(this->syntaxTree.Root);
 }
 
 AbstractSyntaxTree* Parser::GetSyntaxTree()
 {
-	return this->syntaxTree;
+	return &this->syntaxTree;
 }
 
 void Parser::ToString(const std::string& prefix, Node* node)
@@ -415,5 +413,5 @@ void Parser::ToString(const std::string& prefix, Node* node)
 
 void Parser::ToString()
 {
-	ToString("", this->syntaxTree->Root);
+	ToString("", this->syntaxTree.Root);
 }

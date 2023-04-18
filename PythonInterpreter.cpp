@@ -9,44 +9,53 @@
 
 using namespace std;
 
-int main()
+void start()
 {
 	fstream my_file;
 	my_file.open("p.txt");
-	if (!my_file) 
+	if (!my_file)
 	{
 		cout << "The file does not exist!";
 	}
-	else 
+	else
 	{
 		string codeLine;
-		Lexer* lexer = new Lexer();
+		Lexer lexer;
+		Parser parser;
+		Compiler compiler;
+
 		while (getline(my_file, codeLine))
 		{
-			lexer->Lex(codeLine);
+			lexer.Lex(codeLine);
 		}
 		//lexer->ToString();
 
-		Parser* parser = new Parser();
-		parser->Parse(lexer->GetTokenList());
-		
+		parser.Parse(lexer.GetTokenList());
+
 		//parser->ToString();
 
-		parser->CheckSyntax();
+		parser.CheckSyntax();
 
-		Compiler* compiler = new Compiler();
+		compiler.BuildCode(parser.GetSyntaxTree()->Root);
 
-		compiler->BuildCode(parser->GetSyntaxTree()->Root);
-
-		compiler->Compile(parser->GetSyntaxTree());
+		compiler.Compile(parser.GetSyntaxTree());
 
 		//compiler->ToString();
 
-		Interpreter* interpreter = Interpreter::getInstance(compiler->GetCodeObject());
-
-		interpreter->Interprete(compiler->GetByteCodeList());
-
+		Interpreter::getInstance(compiler.GetCodeObject())->Interprete(compiler.GetByteCodeList());
 	}
 	my_file.close();
+}
+
+int main()
+{
+	try
+	{
+		start();
+	}
+	catch (exception* e)
+	{
+		cout << e->what();
+	}
 	return 0;
 }

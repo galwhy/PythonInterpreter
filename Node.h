@@ -18,6 +18,8 @@ public:
 
 	Node();
 
+	virtual ~Node();
+
 	Node(Token* Value);
 
 	Node(Token* Value, Node* Parent);
@@ -30,9 +32,9 @@ public:
 
 	Node* GetLastChild();
 
-	void CheckChild(CodeObject* codeObject, vector<ByteCode*>* ByteCodeList, Node* child);
+	void CheckChild(CodeObject& codeObject, vector<ByteCode*>& ByteCodeList, Node* child);
 
-	virtual void ToByteCode(CodeObject* codeObject, vector<ByteCode*>* ByteCodeList) {};
+	virtual void ToByteCode(CodeObject& codeObject, vector<ByteCode*>& ByteCodeList) {};
 };
 
 class RootNode : public Node
@@ -44,7 +46,7 @@ public:
 
 	RootNode(Token* Value, Node* Parent);
 
-	void ToByteCode(CodeObject* codeObject, vector<ByteCode*>* ByteCodeList);
+	void ToByteCode(CodeObject& codeObject, vector<ByteCode*>& ByteCodeList);
 };
 
 class EqualNode : public Node
@@ -56,7 +58,7 @@ public:
 
 	EqualNode(Token* Value, Node* Parent);
 
-	void ToByteCode(CodeObject* codeObject, vector<ByteCode*>* ByteCodeList);
+	void ToByteCode(CodeObject& codeObject, vector<ByteCode*>& ByteCodeList);
 };
 
 class IteratorNode : public Node
@@ -68,7 +70,7 @@ public:
 
 	IteratorNode(Token* Value, Node* Parent);
 
-	void ToByteCode(CodeObject* codeObject, vector<ByteCode*>* ByteCodeList);
+	void ToByteCode(CodeObject& codeObject, vector<ByteCode*>& ByteCodeList);
 };
 
 class OperatorNode : public Node
@@ -80,7 +82,7 @@ public:
 
 	OperatorNode(Token* Value, Node* Parent);
 
-	void ToByteCode(CodeObject* codeObject, vector<ByteCode*>* ByteCodeList);
+	void ToByteCode(CodeObject& codeObject, vector<ByteCode*>& ByteCodeList);
 };
 
 class GlobalNode : public Node
@@ -92,7 +94,7 @@ public:
 
 	GlobalNode(Token* Value, Node* Parent);
 
-	void ToByteCode(CodeObject* codeObject, vector<ByteCode*>* ByteCodeList);
+	void ToByteCode(CodeObject& codeObject, vector<ByteCode*>& ByteCodeList);
 };
 
 class CompareNode : public Node
@@ -104,7 +106,7 @@ public:
 
 	CompareNode(Token* Value, Node* Parent);
 
-	void ToByteCode(CodeObject* codeObject, vector<ByteCode*>* ByteCodeList);
+	void ToByteCode(CodeObject& codeObject, vector<ByteCode*>& ByteCodeList);
 };
 
 class BranchNode : public Node
@@ -116,7 +118,7 @@ public:
 
 	BranchNode(Token* Value, Node* Parent);
 
-	void ToByteCode(CodeObject* codeObject, vector<ByteCode*>* ByteCodeList);
+	void ToByteCode(CodeObject& codeObject, vector<ByteCode*>& ByteCodeList);
 };
 
 class BoolNode : public Node
@@ -128,7 +130,7 @@ public:
 
 	BoolNode(Token* Value, Node* Parent);
 
-	void ToByteCode(CodeObject* codeObject, vector<ByteCode*>* ByteCodeList);
+	void ToByteCode(CodeObject& codeObject, vector<ByteCode*>& ByteCodeList);
 };
 
 class ReturnNode : public Node
@@ -140,5 +142,5 @@ public:
 
 	ReturnNode(Token* Value, Node* Parent);
 
-	void ToByteCode(CodeObject* codeObject, vector<ByteCode*>* ByteCodeList);
+	void ToByteCode(CodeObject& codeObject, vector<ByteCode*>& ByteCodeList);
 };

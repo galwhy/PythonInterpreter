@@ -82,18 +82,6 @@ void Interpreter::BinaryAdd(int index)
 	instance->CallStack.pop();
 	Object* result = num2->Add(num1);
 
-	/*if (num1->type == num2->type)
-	{
-		if (num1->type == ObjectType::Int)
-			result = new IntObject(ObjectType::Int, stoi(num1->Repr()) + stoi(num2->Repr()));
-		else if(num1->type == ObjectType::String)
-			result = new StringObject(ObjectType::String, num1->Repr() + num2->Repr());
-	}
-	else
-	{
-		cout << "Error";
-		return;
-	}*/
 	instance->CallStack.push(result);
 }
 
@@ -104,16 +92,7 @@ void Interpreter::BinarySubtract(int index)
 	Object* num2 = instance->CallStack.top();
 	instance->CallStack.pop();
 	Object* result = num2->subtract(num1);;
-	/*if (num1->type == num2->type)
-	{
-		if (num1->type == ObjectType::Int)
-			result = new IntObject(ObjectType::Int, stoi(num1->Repr()) - stoi(num2->Repr()));
-	}
-	else
-	{
-		cout << "Error";
-		return;
-	}*/
+
 	instance->CallStack.push(result);
 }
 
@@ -124,16 +103,7 @@ void Interpreter::BinaryMultiply(int index)
 	Object* num2 = instance->CallStack.top();
 	instance->CallStack.pop();
 	Object* result = num2->multiply(num1);;
-	/*if (num1->type == num2->type)
-	{
-		if (num1->type == ObjectType::Int)
-			result = new IntObject(ObjectType::Int, stoi(num1->Repr()) * stoi(num2->Repr()));
-	}
-	else
-	{
-		cout << "Error";
-		return;
-	}*/
+
 	instance->CallStack.push(result);
 }
 
@@ -144,16 +114,7 @@ void Interpreter::BinaryDivide(int index)
 	Object* num2 = instance->CallStack.top();
 	instance->CallStack.pop();
 	Object* result = num2->divide(num1);;
-	/*if (num1->type == num2->type)
-	{
-		if (num1->type == ObjectType::Int)
-			result = new IntObject(ObjectType::Int, stoi(num1->Repr()) / stoi(num2->Repr()));
-	}
-	else
-	{
-		cout << "Error";
-		return;
-	}*/
+
 	instance->CallStack.push(result);
 }
 
@@ -190,22 +151,6 @@ void Interpreter::CompareOp(int index)
 	if (cmpOp == ">")
 	{
 		result = value2->IsBigger(value1);
-		/*if (value1->type == value2->type)
-		{
-			if (value1->type == ObjectType::Int)
-			{
-				result = new BoolObject(ObjectType::Bool, stoi(value2->Repr()) > stoi(value1->Repr()));
-			}
-			else if (value1->type == ObjectType::String)
-			{
-				result = new BoolObject(ObjectType::Bool, value2->Repr() > value1->Repr());
-			}
-		}
-		else
-		{
-			cout << "Error";
-			return;
-		}*/
 	}
 	else if (cmpOp == ">=")
 	{
@@ -230,84 +175,18 @@ void Interpreter::CompareOp(int index)
 	else if (cmpOp == "<")
 	{
 		result = value2->IsSmaller(value1);
-		/*if (value1->type == value2->type)
-		{
-			if (value1->type == ObjectType::Int)
-			{
-				result = new BoolObject(ObjectType::Bool, stoi(value2->Repr()) < stoi(value1->Repr()));
-			}
-			else if (value1->type == ObjectType::String)
-			{
-				result = new BoolObject(ObjectType::Bool, value2->Repr() < value1->Repr());
-			}
-		}
-		else
-		{
-			cout << "Error";
-			return;
-		}*/
 	}
 	else if (cmpOp == "<=")
 	{
 		result = new BoolObject(value2->IsSmaller(value1)->Repr() == "true" || value2->IsEqual(value1)->Repr() == "true");
-
-		//if (value1->type == value2->type)
-		//{
-		//	if (value1->type == ObjectType::Int)
-		//	{
-		//		result = new BoolObject(ObjectType::Bool, stoi(value2->Repr()) <= stoi(value1->Repr()));
-		//	}
-		//	else if (value1->type == ObjectType::String)
-		//	{
-		//		result = new BoolObject(ObjectType::Bool, value2->Repr() <= value1->Repr());
-		//	}
-		//}
-		//else
-		//{
-		//	cout << "Error";
-		//	return;
-		//}
 	}
 	else if (cmpOp == "==")
 	{
 		result = value2->IsEqual(value1);
-	/*	if (value1->type == value2->type)
-		{
-			if (value1->type == ObjectType::Int)
-			{
-				result = new BoolObject(ObjectType::Bool, stoi(value2->Repr()) == stoi(value1->Repr()));
-			}
-			else if (value1->type == ObjectType::String)
-			{
-				result = new BoolObject(ObjectType::Bool, value2->Repr() == value1->Repr());
-			}
-		}
-		else
-		{
-			cout << "Error";
-			return;
-		}*/
 	}
 	else if (cmpOp == "!=")
 	{
 	result = new BoolObject(value2->IsEqual(value1)->Repr() == "false");
-
-		/*if (value1->type == value2->type)
-		{
-			if (value1->type == ObjectType::Int)
-			{
-				result = new BoolObject(ObjectType::Bool, stoi(value2->Repr()) != stoi(value1->Repr()));
-			}
-			else if (value1->type == ObjectType::String)
-			{
-				result = new BoolObject(ObjectType::Bool, value2->Repr() != value1->Repr());
-			}
-		}
-		else
-		{
-			cout << "Error";
-			return;
-		}*/
 	}
 	instance->CallStack.push(result);
 }

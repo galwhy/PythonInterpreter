@@ -9,7 +9,7 @@ using namespace std;
 
 class Lexer
 {
-	vector<Token*> *TokenList;
+	vector<Token*> TokenList;
 
 	vector<string> NumOperators;
 	vector<string> BoolOperators;
@@ -27,7 +27,7 @@ public:
 
 	void Lex(string CodeLine);
 
-	vector<Token*>* GetTokenList();
+	vector<Token*> GetTokenList();
 
 	void ToString();
 };

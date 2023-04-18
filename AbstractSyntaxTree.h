@@ -19,17 +19,7 @@ public:
 
 	AbstractSyntaxTree();
 
-	AbstractSyntaxTree(Token* Value);
+	~AbstractSyntaxTree();
 
-	AbstractSyntaxTree(Token* Value, Node* Parent);
-
-	void ToByteCode(CodeObject* codeObject, vector<ByteCode*>* ByteCodeList);
-
-	//void InsertChild(AbstractSyntaxTree* syntaxTree);
-
-	//AbstractSyntaxTree* GetParent();
-
-	//AbstractSyntaxTree* GetChild(int index);
-
-	//AbstractSyntaxTree* GetLastChild();
+	void ToByteCode(CodeObject& codeObject, vector<ByteCode*>& ByteCodeList);
 };
