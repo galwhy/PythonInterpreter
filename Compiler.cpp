@@ -52,7 +52,9 @@ void Compiler::BuildCode(Node* node)
 			{
 				for (Object* value : codeObject.co_consts)
 				{
-					if (value != NULL && value->Repr() == node->Value->value)
+					/*if (value != NULL && value->Repr() == node->Value->value && value->type == node->Value->literalType)
+						doesExist = true;*/
+					if (value != NULL && value->compare(node->Value))
 						doesExist = true;
 				}
 				if (!doesExist)

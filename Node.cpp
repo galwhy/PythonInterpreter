@@ -287,8 +287,15 @@ void BranchNode::ToByteCode(CodeObject& codeObject, vector<ByteCode*>& ByteCodeL
 		if (Value->value == "for")
 		{
 			ByteCodeList.at(startLine)->OperandArg = (ByteCodeList.size()) * 2;
+			for (int i = startLine / 2; i < ByteCodeList.size(); i++)
+			{
+				if (ByteCodeList.at(i)->OpCode == OpCodeCommands::FOR_ITER)
+				{
+					startLine = i*2;
+				}
+			}
 		}
-		ByteCode* byteCode = new ByteCode(OpCodeCommands::JUMP_ABSOLUTE, startLine*2);
+		ByteCode* byteCode = new ByteCode(OpCodeCommands::JUMP_ABSOLUTE, startLine);
 		ByteCodeList.push_back(byteCode);
 	}
 	for (int i = startLine/2; i < ByteCodeList.size(); i++)

@@ -4,6 +4,7 @@
 #include <sstream>
 #include "Object.h"
 #include "ObjectIterator.h"
+#include "Token.h"
 
 using namespace std;
 
@@ -12,6 +13,8 @@ Object::Object(ObjectType type)
 {
 	this->type = type;
 }
+
+bool Object::compare(Token* token) { throw exception(""); }
 
 Object* Object::Add(Object* obj) { throw exception(""); }
 
@@ -35,6 +38,19 @@ string Object::Repr() {throw exception("");}
 StringObject::StringObject(string value) : Object(ObjectType::String)
 {
 	this->value = value;
+}
+
+bool StringObject::compare(Token* token)
+{
+	if (token->literalType != ObjectType::String)
+	{
+		return false;
+	}
+	if (this->Repr() == token->value)
+	{
+		return true;
+	}
+	return false;
 }
 
 Object* StringObject::Add(Object* obj)
@@ -90,6 +106,20 @@ string StringObject::Repr()
 IntObject::IntObject(int value) : Object(ObjectType::Int)
 {
 	this->value = value;
+}
+
+bool IntObject::compare(Token* token)
+{
+	if (token->literalType != ObjectType::String)
+	{
+		return false;
+	}
+	if (this->Repr() == token->value)
+	{
+		return true;
+	}
+	return false;
+
 }
 
 Object* IntObject::Add(Object* obj)
@@ -180,6 +210,20 @@ BoolObject::BoolObject(bool value) : Object(ObjectType::Bool)
 	this->value = value;
 }
 
+bool BoolObject::compare(Token* token)
+{
+	if (token->literalType != ObjectType::String)
+	{
+		return false;
+	}
+	if (this->Repr() == token->value)
+	{
+		return true;
+	}
+	return false;
+
+}
+
 Object* BoolObject::IsEqual(Object* obj)
 {
 	if (obj->type != ObjectType::Bool) {
@@ -200,6 +244,41 @@ string BoolObject::Repr()
 ListObject::ListObject(vector<Object*>* list) : Object(ObjectType::List)
 {
 	this->list = list;
+}
+
+bool ListObject::compare(Token* token)
+{
+	if (token->literalType != ObjectType::List)
+	{
+		return false;
+	}
+	string value = token->value;
+	int listIndex = 0;
+	int index = 1;
+	int delimeter = 0;
+	while (index < value.size() - 1)
+	{
+		int delimeter = value.find(",", index);
+		if (delimeter == -1)
+			delimeter = value.length() - 1;
+		while (value[index] == ' ')
+		{
+			index++;
+		}
+		string listValue = value.substr(index, delimeter - index);
+		if (listValue.length() == 0)
+		{
+			index++;
+			continue;
+		}
+		if (list->at(listIndex)->Repr() != listValue)
+		{
+			return false;
+		}
+		index += listValue.length();
+	}
+	return true;
+
 }
 
 Object* ListObject::GetIterator()
@@ -228,6 +307,20 @@ IdentifierObject::IdentifierObject(string name) : Object(ObjectType::Identifier)
 	this->name = name;
 }
 
+bool IdentifierObject::compare(Token* token)
+{
+	if (token->literalType != ObjectType::Identifier)
+	{
+		return false;
+	}
+	if (this->Repr() == token->value)
+	{
+		return true;
+	}
+	return false;
+
+}
+
 string IdentifierObject::Repr()
 {
 	return name;
@@ -237,6 +330,20 @@ string IdentifierObject::Repr()
 GlobalObject::GlobalObject(string name) : Object(ObjectType::Global)
 {
 	this->name = name;
+}
+
+bool GlobalObject::compare(Token* token)
+{
+	if (token->literalType != ObjectType::Global)
+	{
+		throw exception("");
+	}
+	if (this->Repr() == token->value)
+	{
+		return true;
+	}
+	return false;
+
 }
 
 string GlobalObject::Repr()

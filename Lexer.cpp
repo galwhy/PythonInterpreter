@@ -37,10 +37,20 @@ int Lexer::CheckIndentation(string* CodeLine)
 	return count;
 }
 
+void Lexer::ReplaceWhiteSpace(string* CodeLine)
+{
+	for (int i = 0; i < CodeLine->length(); i++)
+	{
+		if (isspace(CodeLine->at(i)))
+			CodeLine->at(i) = ' ';
+	}
+}
+
 void Lexer::Lex(string CodeLine)
 {
 	this->line++;
 	int codeIndex = 0;
+	ReplaceWhiteSpace(&CodeLine);
 	int indentation = CheckIndentation(&CodeLine);
 	bool identifiedToken = false;
 	string currentLine;

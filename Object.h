@@ -18,6 +18,8 @@ enum class ObjectType
 
 class ObjectIterator;
 
+class Token;
+
 class Object
 {
 public:
@@ -26,6 +28,8 @@ public:
 	Object(ObjectType type);
 
 	virtual string Repr();
+
+	virtual bool compare(Token* token);
 
 	virtual Object* Add(Object* obj);
 
@@ -51,6 +55,8 @@ public:
 
 	StringObject(string value);
 
+	virtual bool compare(Token* token);
+
 	virtual Object* Add(Object* obj);
 
 	virtual	Object* IsEqual(Object* obj);
@@ -68,6 +74,8 @@ public:
 	int value;
 
 	IntObject(int value);
+
+	virtual bool compare(Token* token);
 
 	virtual Object* Add(Object* obj);
 
@@ -93,6 +101,8 @@ public:
 
 	BoolObject(bool value);
 
+	virtual bool compare(Token* token);
+
 	virtual	Object* IsEqual(Object* obj);
 
 	virtual	string Repr();
@@ -104,6 +114,8 @@ public:
 	vector<Object*>* list;
 
 	ListObject(vector<Object*>* list);
+
+	virtual bool compare(Token* token);
 
 	virtual Object* GetIterator();
 
@@ -117,6 +129,8 @@ public:
 
 	IdentifierObject(string name);
 
+	virtual bool compare(Token* token);
+
 	virtual	string Repr();
 };
 
@@ -126,6 +140,8 @@ public:
 	string name;
 
 	GlobalObject(string name);
+
+	virtual bool compare(Token* token);
 
 	virtual	string Repr();
 };

@@ -25,6 +25,8 @@ public:
 
 	int CheckIndentation(string* CodeLine);
 
+	void ReplaceWhiteSpace(string* CodeLine);
+
 	void Lex(string CodeLine);
 
 	vector<Token*> GetTokenList();
