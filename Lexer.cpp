@@ -19,7 +19,17 @@ Lexer::Lexer()
 	this->IteratorOperators = { "in" };
 	this->KeyWords = {"print", "return"};
 	this->Branches = { "elif", "if", "else", "while", "for"};
-	this->Delimiters = { ":", "(", ")" , "\""};
+	this->Delimiters = { ":", "(", ")"};
+}
+
+bool Lexer::CheckNumber(string num)
+{
+	for (char c : num)
+	{
+		if (!isdigit(c))
+			return false;
+	}
+	return true;
 }
 
 int Lexer::CheckIndentation(string* CodeLine)
@@ -161,13 +171,13 @@ void Lexer::Lex(string CodeLine)
 		
 		for (int i = 1; i < currentToken.length(); i++)
 		{
-			if (!(isalnum(currentToken[i]) || currentToken[i] == '_' || currentToken[i] == ',' || currentToken[i] == ' ' || currentToken[i] == ']'))
+			if (currentToken[i] == ':' || currentToken[i] == ')')
 			{
 				currentToken = currentToken.substr(0, i);
 				break;
 			}
 		}
-		if ((isalpha(currentToken[0]) || currentToken[0] == '_') && (this->TokenList.empty() || this->TokenList.back()->value != "\""))
+		if ((isalpha(currentToken[0]) || currentToken[0] == '_'))
 		{
 			
 			Token* token = new Token(Type::Identifier, currentToken, indentation, this->line);
@@ -178,14 +188,28 @@ void Lexer::Lex(string CodeLine)
 		else 
 		{
 			Token* token = new Token(Type::Literal, currentToken, indentation, this->line);
-			if (this->TokenList.back()->value == "\"")
+			if ((* currentToken.begin() == '\"' && *(currentToken.end() - 1) == '\"') || (*currentToken.begin() == '\'' && *(currentToken.end() - 1) == '\''))
+			{
+				*token->value.begin() = '\'';
+				*(token->value.end() - 1) = '\'';
 				token->literalType = ObjectType::String;
+			}
 			else if (currentToken == "true" || currentToken == "false")
+			{
 				token->literalType = ObjectType::Bool;
-			else if (currentToken[0] == '[')
+			}
+			else if (*currentToken.begin() == '[' && *(currentToken.end() - 1) == ']')
+			{
 				token->literalType = ObjectType::List;
-			else
+			}
+			else if (this->CheckNumber(currentToken))
+			{
 				token->literalType = ObjectType::Int;
+			}
+			else
+			{
+				throw exception("");
+			}
 			this->TokenList.push_back(token);
 			codeIndex += currentToken.length();
 			continue;

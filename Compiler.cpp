@@ -25,7 +25,7 @@ void Compiler::BuildCode(Node* node)
 			{
 				for (Object* value : codeObject.co_varnames)
 				{
-					if (value->Repr() == node->Value->value)
+					if (value->compare(node->Value))
 						doesExist = true;
 				}
 				if (!doesExist)
@@ -38,7 +38,7 @@ void Compiler::BuildCode(Node* node)
 			{
 				for (Object* value : codeObject.co_names)
 				{
-					if (value->Repr() == node->Value->value)
+					if (value->compare(node->Value))
 						doesExist = true;
 				}
 				if (!doesExist)
@@ -59,6 +59,8 @@ void Compiler::BuildCode(Node* node)
 				}
 				if (!doesExist)
 				{
+					//node->Value->value.erase(remove(node->Value->value.begin(), node->Value->value.end(), '\''), node->Value->value.end()); //remove A from string
+					//node->Value->value.erase(remove(node->Value->value.begin(), node->Value->value.end(), '"'), node->Value->value.end()); //remove A from string
 					Object* obj;
 					if (node->Value->literalType == ObjectType::List)
 					{
@@ -82,9 +84,9 @@ void Compiler::BuildCode(Node* node)
 								continue;
 							}
 							Object* obj;
-							if (listValue[0] == '"')
+							if (listValue[0] == '"' || listValue[0] == '\'')
 							{
-								obj = new StringObject(listValue.substr(1, listValue.size() - 1));
+								obj = new StringObject(listValue.substr(1, listValue.size() - 2));
 							}
 							else if (listValue == "true" || listValue == "false")
 							{
@@ -101,7 +103,7 @@ void Compiler::BuildCode(Node* node)
 
 					}
 					else if (node->Value->literalType == ObjectType::String)
-						obj = new StringObject(node->Value->value);
+						obj = new StringObject(node->Value->value.substr(1, node->Value->value.size() - 2));
 					else if (node->Value->literalType == ObjectType::Int)
 						obj = new IntObject(stoi(node->Value->value));
 					else if (node->Value->literalType == ObjectType::Bool)

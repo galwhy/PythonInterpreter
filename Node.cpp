@@ -67,7 +67,7 @@ void Node::CheckChild(CodeObject &codeObject, vector<ByteCode*> &ByteCodeList, N
 		int index;
 		for (int i = 1; i < codeObject.co_consts.size(); i++)
 		{
-			if (codeObject.co_consts.at(i)->Repr()  == child->Value->value)
+			if (codeObject.co_consts.at(i)->compare(child->Value))
 			{
 				index = i;
 				break;
@@ -81,7 +81,7 @@ void Node::CheckChild(CodeObject &codeObject, vector<ByteCode*> &ByteCodeList, N
 		int index;
 		for (int i = 0; i < codeObject.co_varnames.size(); i++)
 		{
-			if (codeObject.co_varnames.at(i)->Repr() == child->Value->value)
+			if (codeObject.co_varnames.at(i)->compare(child->Value))
 			{
 				index = i;
 				break;
@@ -286,7 +286,6 @@ void BranchNode::ToByteCode(CodeObject& codeObject, vector<ByteCode*>& ByteCodeL
 	{
 		if (Value->value == "for")
 		{
-			ByteCodeList.at(startLine)->OperandArg = (ByteCodeList.size()) * 2;
 			for (int i = startLine / 2; i < ByteCodeList.size(); i++)
 			{
 				if (ByteCodeList.at(i)->OpCode == OpCodeCommands::FOR_ITER)
@@ -294,6 +293,7 @@ void BranchNode::ToByteCode(CodeObject& codeObject, vector<ByteCode*>& ByteCodeL
 					startLine = i*2;
 				}
 			}
+			ByteCodeList.at(startLine / 2)->OperandArg = (ByteCodeList.size() + 1) * 2;
 		}
 		ByteCode* byteCode = new ByteCode(OpCodeCommands::JUMP_ABSOLUTE, startLine);
 		ByteCodeList.push_back(byteCode);

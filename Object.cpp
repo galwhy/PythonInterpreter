@@ -99,7 +99,7 @@ Object* StringObject::IsSmaller(Object* obj)
 
 string StringObject::Repr()
 {
-	return value;
+	return "'"  + value + "'";
 }
 
 
@@ -110,7 +110,7 @@ IntObject::IntObject(int value) : Object(ObjectType::Int)
 
 bool IntObject::compare(Token* token)
 {
-	if (token->literalType != ObjectType::String)
+	if (token->literalType != ObjectType::Int)
 	{
 		return false;
 	}
@@ -212,7 +212,7 @@ BoolObject::BoolObject(bool value) : Object(ObjectType::Bool)
 
 bool BoolObject::compare(Token* token)
 {
-	if (token->literalType != ObjectType::String)
+	if (token->literalType != ObjectType::Bool)
 	{
 		return false;
 	}
@@ -276,6 +276,7 @@ bool ListObject::compare(Token* token)
 			return false;
 		}
 		index += listValue.length();
+		listIndex++;
 	}
 	return true;
 
@@ -309,10 +310,6 @@ IdentifierObject::IdentifierObject(string name) : Object(ObjectType::Identifier)
 
 bool IdentifierObject::compare(Token* token)
 {
-	if (token->literalType != ObjectType::Identifier)
-	{
-		return false;
-	}
 	if (this->Repr() == token->value)
 	{
 		return true;
@@ -334,10 +331,6 @@ GlobalObject::GlobalObject(string name) : Object(ObjectType::Global)
 
 bool GlobalObject::compare(Token* token)
 {
-	if (token->literalType != ObjectType::Global)
-	{
-		throw exception("");
-	}
 	if (this->Repr() == token->value)
 	{
 		return true;

@@ -23,6 +23,8 @@ public:
 
 	Lexer();
 
+	bool CheckNumber(string num);
+
 	int CheckIndentation(string* CodeLine);
 
 	void ReplaceWhiteSpace(string* CodeLine);
