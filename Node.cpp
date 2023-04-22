@@ -291,6 +291,7 @@ void BranchNode::ToByteCode(CodeObject& codeObject, vector<ByteCode*>& ByteCodeL
 				if (ByteCodeList.at(i)->OpCode == OpCodeCommands::FOR_ITER)
 				{
 					startLine = i*2;
+					break;
 				}
 			}
 			ByteCodeList.at(startLine / 2)->OperandArg = (ByteCodeList.size() + 1) * 2;

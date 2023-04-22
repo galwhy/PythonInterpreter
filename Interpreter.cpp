@@ -211,7 +211,7 @@ void Interpreter::ForIter(int index)
 		if (newValue == NULL)
 		{
 			instance->CallStack.pop();
-			instance->ByteCodePointer = index/2;
+			instance->ByteCodePointer = index/2-1;
 		}
 		else
 		{

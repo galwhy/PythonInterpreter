@@ -1,8 +1,7 @@
-j = [1, 2, 3, 4, 5, 8]
-i = "hello"
-k = 2
-for i in j:	
-	while i < 10:
-		i = i + 1
-		print(i)
+j = [1,2,3,4,5]
+k = [1,2,3,4,5]
+for i in j:
+	print(i)
+	for f in k:
+		print(f)
 return
