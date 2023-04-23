@@ -65,6 +65,8 @@ public:
 
 	virtual	Object* IsSmaller(Object* obj);
 
+	virtual Object* GetIterator();
+
 	virtual	string Repr();
 };
 

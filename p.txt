@@ -1,7 +1,4 @@
-j = [1,2,3,4,5]
-k = [1,2,3,4,5]
-for i in j:
+s = "hellooooooo"
+for i in s:
 	print(i)
-	for f in k:
-		print(f)
 return

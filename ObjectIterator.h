@@ -17,7 +17,8 @@ public:
 
 class ListIterator : public ObjectIterator
 {
-	std::iterator<std::forward_iterator_tag, Object*> iterr;
+	std::iterator<std::forward_iterator_tag, Object*> current;
+
 
 	vector<Object*>::iterator iter;
 	vector<Object*>* list;
@@ -29,3 +30,17 @@ public:
 
 	virtual	Object* GetCurrent() const;
 };
+
+class StringIterator : public ObjectIterator
+{
+	string::iterator iter;
+	string string;
+
+public:
+	StringIterator(StringObject* str);
+
+	virtual	void Next();
+
+	virtual	Object* GetCurrent() const;
+};
+

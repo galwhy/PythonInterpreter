@@ -97,6 +97,12 @@ Object* StringObject::IsSmaller(Object* obj)
 	return newObj;
 }
 
+Object* StringObject::GetIterator()
+{
+	ObjectIterator* itr = new StringIterator(this);
+	return itr;
+}
+
 string StringObject::Repr()
 {
 	return "'"  + value + "'";
