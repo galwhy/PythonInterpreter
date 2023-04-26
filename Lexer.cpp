@@ -179,10 +179,29 @@ void Lexer::Lex(string CodeLine)
 		}
 		if ((isalpha(currentToken[0]) || currentToken[0] == '_'))
 		{
-			
+			codeIndex += currentToken.length();
+			int parenthesiss1 = currentToken.find("[", 0);
+			int parenthesiss2 = currentToken.find("]", 0);
+			if (parenthesiss1 != -1 && parenthesiss2 != -1)
+			{
+				Token* token = new Token(Type::NumOperator, "[]", indentation, this->line);
+				this->TokenList.push_back(token);
+				if (this->CheckNumber(currentToken.substr(parenthesiss1 + 1, parenthesiss2 - 2)))
+				{
+					token = new Token(Type::Literal, currentToken.substr(parenthesiss1 + 1, parenthesiss2 - 2), indentation, this->line);
+					token->literalType = ObjectType::Int;
+				}
+				else
+					throw exception("");
+				this->TokenList.push_back(token);
+				currentToken = currentToken.substr(0, parenthesiss1);
+			}
+			else if (parenthesiss1 != -1 || parenthesiss2 != -1)
+			{
+				throw exception("");
+			}
 			Token* token = new Token(Type::Identifier, currentToken, indentation, this->line);
 			this->TokenList.push_back(token);
-			codeIndex += currentToken.length();
 			continue;
 		}
 		else 

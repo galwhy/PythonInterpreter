@@ -28,11 +28,11 @@ void start()
 		{
 			lexer.Lex(codeLine);
 		}
-		//lexer->ToString();
+		//lexer.ToString();
 
 		parser.Parse(lexer.GetTokenList());
 
-		//parser->ToString();
+		//parser.ToString();
 
 		parser.CheckSyntax();
 

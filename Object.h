@@ -46,6 +46,8 @@ public:
 	virtual Object* IsSmaller(Object* obj);
 
 	virtual Object* GetIterator();
+
+	virtual Object* GetIndex(Object* obj);
 };
 
 class StringObject : public Object
@@ -66,6 +68,8 @@ public:
 	virtual	Object* IsSmaller(Object* obj);
 
 	virtual Object* GetIterator();
+
+	virtual Object* GetIndex(Object* obj);
 
 	virtual	string Repr();
 };
@@ -120,6 +124,8 @@ public:
 	virtual bool compare(Token* token);
 
 	virtual Object* GetIterator();
+
+	virtual Object* GetIndex(Object* obj);
 
 	virtual	string Repr();
 };

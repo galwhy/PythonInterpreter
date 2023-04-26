@@ -86,10 +86,20 @@ void Parser::Parse(vector<Token*> TokenList)
 
 			if (!operatorOutputStack->empty())
 			{
-				OperatorNode* newTree = new OperatorNode(operatorOutputStack->top(), currentNumricTree);
-				operatorOutputStack->pop();
-				currentNumricTree->InsertChild(newTree);
-				currentNumricTree = newTree;
+				if (operatorOutputStack->top()->value == "[]")
+				{
+					IndexNode* newTree = new IndexNode(operatorOutputStack->top(), currentTree);
+					operatorOutputStack->pop();
+					currentNumricTree->InsertChild(newTree);
+					currentNumricTree = newTree;
+				}
+				else
+				{
+					OperatorNode* newTree = new OperatorNode(operatorOutputStack->top(), currentNumricTree);
+					operatorOutputStack->pop();
+					currentNumricTree->InsertChild(newTree);
+					currentNumricTree = newTree;
+				}
 			}
 			
 
@@ -97,9 +107,20 @@ void Parser::Parse(vector<Token*> TokenList)
 			{
 				if (!operatorOutputStack->empty())
 				{
-					OperatorNode* newTree1 = new OperatorNode(operatorOutputStack->top(), currentNumricTree);
-					operatorOutputStack->pop();
-					currentNumricTree->InsertChild(newTree1);
+					Node* newTree1;
+					if (operatorOutputStack->top()->value == "[]")
+					{
+						newTree1 = new IndexNode(operatorOutputStack->top(), currentTree);
+						operatorOutputStack->pop();
+						currentNumricTree->InsertChild(newTree1);
+					}
+					else
+					{
+						newTree1 = new OperatorNode(operatorOutputStack->top(), currentNumricTree);
+						operatorOutputStack->pop();
+						currentNumricTree->InsertChild(newTree1);
+					}
+					
 
 					Node* newTree2 = new Node(outputStack->top(), currentNumricTree);
 					outputStack->pop();

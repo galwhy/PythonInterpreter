@@ -97,6 +97,18 @@ public:
 	void ToByteCode(CodeObject& codeObject, vector<ByteCode*>& ByteCodeList);
 };
 
+class IndexNode : public Node
+{
+public:
+	IndexNode();
+
+	IndexNode(Token* Value);
+
+	IndexNode(Token* Value, Node* Parent);
+
+	void ToByteCode(CodeObject& codeObject, vector<ByteCode*>& ByteCodeList);
+};
+
 class CompareNode : public Node
 {
 public:

@@ -63,6 +63,8 @@ public:
 
 	void static JumpAbsolute(int index);
 
+	void static binarySubscr(int index);
+
 	void static ReturnValue(int index);
 
 	void static Print(vector<Object*> operators);

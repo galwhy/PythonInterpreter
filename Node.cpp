@@ -234,6 +234,25 @@ void GlobalNode::ToByteCode(CodeObject& codeObject, vector<ByteCode*>& ByteCodeL
 
 
 
+IndexNode::IndexNode() : Node() {};
+
+IndexNode::IndexNode(Token* Value) : Node(Value) {};
+
+IndexNode::IndexNode(Token* Value, Node* Parent) : Node(Value, Parent) {};
+
+void IndexNode::ToByteCode(CodeObject& codeObject, vector<ByteCode*>& ByteCodeList)
+{
+	for (Node* child : *Children)
+	{
+		CheckChild(codeObject, ByteCodeList, child);
+	}
+
+	ByteCode* byteCode = new ByteCode(OpCodeCommands::BINARY_SUBSCR);
+	ByteCodeList.push_back(byteCode);
+}
+
+
+
 CompareNode::CompareNode() : Node() {};
 
 CompareNode::CompareNode(Token* Value) : Node(Value) {};

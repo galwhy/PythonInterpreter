@@ -32,6 +32,8 @@ Object* Object::IsSmaller(Object* obj){ throw exception(""); }
 
 Object* Object::GetIterator() { throw exception(""); }
 
+Object* Object::GetIndex(Object* obj) { throw exception(""); }
+
 string Object::Repr() {throw exception("");}
 
 
@@ -101,6 +103,18 @@ Object* StringObject::GetIterator()
 {
 	ObjectIterator* itr = new StringIterator(this);
 	return itr;
+}
+
+Object* StringObject::GetIndex(Object* obj)
+{
+	if (obj->type != ObjectType::Int) {
+		throw std::exception("");
+	}
+
+	IntObject* rhs = (IntObject*)obj;
+	std::string s(1, value[rhs->value]);
+	StringObject* newObj = new StringObject(s);
+	return newObj;
 }
 
 string StringObject::Repr()
@@ -292,6 +306,16 @@ Object* ListObject::GetIterator()
 {
 	ObjectIterator* itr = new ListIterator(this);
 	return itr;
+}
+
+Object* ListObject::GetIndex(Object* obj)
+{
+	if (obj->type != ObjectType::Int) {
+		throw std::exception("");
+	}
+
+	IntObject* rhs = (IntObject*)obj;
+	return list->at(rhs->value);;
 }
 
 string ListObject::Repr()
