@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <sstream>
 #include "Token.h"
 #include "Lexer.h"
 
@@ -190,15 +191,16 @@ void Lexer::Lex(string CodeLine)
 				{
 					token = new Token(Type::Literal, currentToken.substr(parenthesiss1 + 1, parenthesiss2 - 2), indentation, this->line);
 					token->literalType = ObjectType::Int;
+					
 				}
 				else
-					throw exception("");
+					throw LexerExeption("Error Index must be a number", this->line);
 				this->TokenList.push_back(token);
 				currentToken = currentToken.substr(0, parenthesiss1);
 			}
 			else if (parenthesiss1 != -1 || parenthesiss2 != -1)
 			{
-				throw exception("");
+				throw LexerExeption("Error missing parenthesiss", this->line);
 			}
 			Token* token = new Token(Type::Identifier, currentToken, indentation, this->line);
 			this->TokenList.push_back(token);
@@ -227,7 +229,7 @@ void Lexer::Lex(string CodeLine)
 			}
 			else
 			{
-				throw exception("");
+				throw LexerExeption("Error Unkown value", this->line);
 			}
 			this->TokenList.push_back(token);
 			codeIndex += currentToken.length();
@@ -283,4 +285,16 @@ void Lexer::ToString()
 		}
 	
 	}
+}
+
+LexerExeption::LexerExeption(string message, int line)
+{
+	stringstream ss;
+	ss << "line " << line << ": " << message;
+	msg = ss.str();
+}
+
+const char* LexerExeption::what() const noexcept
+{
+	return msg.c_str();
 }

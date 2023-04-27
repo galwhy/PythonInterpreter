@@ -1,5 +1,5 @@
 s = "hellooooooo"
 k = [1,2,3,4]
-i = s[3]
-print(i)
+while s > k:
+	print(s)
 return

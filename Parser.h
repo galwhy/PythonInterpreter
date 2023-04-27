@@ -25,3 +25,13 @@ public:
 
 	void ToString();
 };
+
+class ParserException : public exception
+{
+	string msg;
+
+public:
+	ParserException(int line);
+
+	virtual const char* what() const noexcept;
+};

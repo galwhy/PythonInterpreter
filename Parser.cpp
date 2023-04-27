@@ -3,6 +3,7 @@
 #include <vector>
 #include <stack>
 #include <queue>
+#include <sstream>
 #include "AbstractSyntaxTree.h"
 #include "Token.h"
 #include "Parser.h"
@@ -390,8 +391,7 @@ int Parser::CheckSyntax(Node* node)
 			{
 				if (treeList->size() != 2)
 				{
-					cout << "Syntax Error: line " << node->Value->line;
-					return 1;
+					throw ParserException(node->Value->line);
 				}
 			}
 		}
@@ -435,4 +435,17 @@ void Parser::ToString(const std::string& prefix, Node* node)
 void Parser::ToString()
 {
 	ToString("", this->syntaxTree.Root);
+}
+
+
+ParserException::ParserException(int line)
+{
+	stringstream ss;
+	ss << "Syntax Error: line " << line;
+	msg = ss.str();
+}
+
+const char* ParserException::what() const noexcept
+{
+	return msg.c_str();
 }

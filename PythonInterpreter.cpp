@@ -53,9 +53,9 @@ int main()
 	{
 		start();
 	}
-	catch (exception* e)
+	catch (exception &e)
 	{
-		cout << e->what();
+		cout << e.what();
 	}
 	return 0;
 }

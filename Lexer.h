@@ -35,3 +35,14 @@ public:
 
 	void ToString();
 };
+
+
+class LexerExeption : public exception
+{
+	string msg;
+
+public:
+	LexerExeption(string message, int line);
+
+	virtual const char* what() const noexcept;
+};

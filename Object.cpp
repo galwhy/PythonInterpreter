@@ -14,27 +14,27 @@ Object::Object(ObjectType type)
 	this->type = type;
 }
 
-bool Object::compare(Token* token) { throw exception(""); }
+bool Object::compare(Token* token) { throw exception("Unable to compare Token"); }
 
-Object* Object::Add(Object* obj) { throw exception(""); }
+Object* Object::Add(Object* obj) { throw exception("Unable to add objects"); }
 
-Object* Object::subtract(Object* obj) { throw exception(""); }
+Object* Object::subtract(Object* obj) { throw exception("Unable to subtract objects"); }
 
-Object* Object::multiply(Object* obj) { throw exception(""); }
+Object* Object::multiply(Object* obj) { throw exception("Unable to multiply objects"); }
 
-Object* Object::divide(Object* obj) { throw exception(""); }
+Object* Object::divide(Object* obj) { throw exception("Unable to divide objects"); }
 
-Object* Object::IsEqual(Object* obj) { throw exception(""); }
+Object* Object::IsEqual(Object* obj) { throw exception("Unable to compare objects"); }
 
-Object* Object::IsBigger(Object* obj) { throw exception(""); }
+Object* Object::IsBigger(Object* obj) { throw exception("Unable to compare objects"); }
 
-Object* Object::IsSmaller(Object* obj){ throw exception(""); }
+Object* Object::IsSmaller(Object* obj){ throw exception("Unable to compare objects"); }
 
-Object* Object::GetIterator() { throw exception(""); }
+Object* Object::GetIterator() { throw exception("Object is not iteratable"); }
 
-Object* Object::GetIndex(Object* obj) { throw exception(""); }
+Object* Object::GetIndex(Object* obj) { throw exception("Unable to get item from index"); }
 
-string Object::Repr() {throw exception("");}
+string Object::Repr() { throw exception("Unable to call Repr"); }
 
 
 StringObject::StringObject(string value) : Object(ObjectType::String)
@@ -58,7 +58,7 @@ bool StringObject::compare(Token* token)
 Object* StringObject::Add(Object* obj)
 {
 	if (obj->type != ObjectType::String) {
-		throw std::exception("");
+		throw std::exception("Unable to add different object types");
 	}
 
 	StringObject* rhs = (StringObject*)obj;
@@ -69,7 +69,7 @@ Object* StringObject::Add(Object* obj)
 Object* StringObject::IsEqual(Object* obj)
 {
 	if (obj->type != ObjectType::String) {
-		throw std::exception("");
+		throw std::exception("Unable to compare different object types");
 	}
 
 	StringObject* rhs = (StringObject*)obj;
@@ -80,7 +80,7 @@ Object* StringObject::IsEqual(Object* obj)
 Object* StringObject::IsBigger(Object* obj)
 {
 	if (obj->type != ObjectType::String) {
-		throw std::exception("");
+		throw std::exception("Unable to compare different object types");
 	}
 
 	StringObject* rhs = (StringObject*)obj;
@@ -91,7 +91,7 @@ Object* StringObject::IsBigger(Object* obj)
 Object* StringObject::IsSmaller(Object* obj)
 {
 	if (obj->type != ObjectType::String) {
-		throw std::exception("");
+		throw std::exception("Unable to compare different object types");
 	}
 
 	StringObject* rhs = (StringObject*)obj;
@@ -108,7 +108,7 @@ Object* StringObject::GetIterator()
 Object* StringObject::GetIndex(Object* obj)
 {
 	if (obj->type != ObjectType::Int) {
-		throw std::exception("");
+		throw std::exception("Index has to be an Integer");
 	}
 
 	IntObject* rhs = (IntObject*)obj;
@@ -145,7 +145,7 @@ bool IntObject::compare(Token* token)
 Object* IntObject::Add(Object* obj)
 {
 	if (obj->type != ObjectType::Int) {
-		throw std::exception("");
+		throw std::exception("Unable to add different object types");
 	}
 
 	IntObject* rhs = (IntObject*)obj;
@@ -156,7 +156,7 @@ Object* IntObject::Add(Object* obj)
 Object* IntObject::subtract(Object* obj)
 {
 	if (obj->type != ObjectType::Int) {
-		throw std::exception("");
+		throw std::exception("Unable to subtract different object types");
 	}
 
 	IntObject* rhs = (IntObject*)obj;
@@ -167,7 +167,7 @@ Object* IntObject::subtract(Object* obj)
 Object* IntObject::multiply(Object* obj)
 {
 	if (obj->type != ObjectType::Int) {
-		throw std::exception("");
+		throw std::exception("Unable to multiply different object types");
 	}
 
 	IntObject* rhs = (IntObject*)obj;
@@ -178,7 +178,7 @@ Object* IntObject::multiply(Object* obj)
 Object* IntObject::divide(Object* obj)
 {
 	if (obj->type != ObjectType::Int) {
-		throw std::exception("");
+		throw std::exception("Unable to divide different object types");
 	}
 
 	IntObject* rhs = (IntObject*)obj;
@@ -189,7 +189,7 @@ Object* IntObject::divide(Object* obj)
 Object* IntObject::IsEqual(Object* obj)
 {
 	if (obj->type != ObjectType::Int) {
-		throw std::exception("");
+		throw std::exception("Unable to compare different object types");
 	}
 
 	IntObject* rhs = (IntObject*)obj;
@@ -200,7 +200,7 @@ Object* IntObject::IsEqual(Object* obj)
 Object* IntObject::IsBigger(Object* obj)
 {
 	if (obj->type != ObjectType::Int) {
-		throw std::exception("");
+		throw std::exception("Unable to compare different object types");
 	}
 
 	IntObject* rhs = (IntObject*)obj;
@@ -211,7 +211,7 @@ Object* IntObject::IsBigger(Object* obj)
 Object* IntObject::IsSmaller(Object* obj)
 {
 	if (obj->type != ObjectType::Int) {
-		throw std::exception("");
+		throw std::exception("Unable to compare different object types");
 	}
 
 	IntObject* rhs = (IntObject*)obj;
@@ -247,7 +247,7 @@ bool BoolObject::compare(Token* token)
 Object* BoolObject::IsEqual(Object* obj)
 {
 	if (obj->type != ObjectType::Bool) {
-		throw std::exception("");
+		throw std::exception("Unable to compare different object types");
 	}
 
 	BoolObject* rhs = (BoolObject*)obj;
@@ -311,7 +311,7 @@ Object* ListObject::GetIterator()
 Object* ListObject::GetIndex(Object* obj)
 {
 	if (obj->type != ObjectType::Int) {
-		throw std::exception("");
+		throw std::exception("Index has to be an Integer");
 	}
 
 	IntObject* rhs = (IntObject*)obj;
