@@ -9,10 +9,10 @@
 
 using namespace std;
 
-void start()
+void start(string fileName)
 {
 	fstream my_file;
-	my_file.open("p.txt");
+	my_file.open(fileName);
 	if (!my_file)
 	{
 		cout << "The file does not exist!";
@@ -47,11 +47,14 @@ void start()
 	my_file.close();
 }
 
-int main()
+int main(int argc, char* argv[])
 {
 	try
 	{
-		start();
+		if (argc > 1)
+		{
+			start(argv[1]);
+		}
 	}
 	catch (exception &e)
 	{

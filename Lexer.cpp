@@ -75,6 +75,10 @@ void Lexer::Lex(string CodeLine)
 		{
 			whitespace = CodeLine.find("]", codeIndex) + 1;
 		}
+		if (CodeLine[codeIndex] == '"')
+		{
+			whitespace = CodeLine.find("\"", codeIndex+1) + 1;
+		}
 		currentToken = CodeLine.substr(codeIndex, whitespace - codeIndex);
 		if (currentToken.length() == 0)
 		{
