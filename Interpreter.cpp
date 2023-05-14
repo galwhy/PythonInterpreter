@@ -42,6 +42,7 @@ Interpreter::Interpreter(CodeObject* codeObject)
 	byteCodeMap.emplace(OpCodeCommands::JUMP_IF_FALSE, &Interpreter::JumpIfFalse);
 	byteCodeMap.emplace(OpCodeCommands::JUMP_IF_TRUE, &Interpreter::JumpIfTrue);
 	byteCodeMap.emplace(OpCodeCommands::JUMP_ABSOLUTE, &Interpreter::JumpAbsolute);
+	byteCodeMap.emplace(OpCodeCommands::JUMP_FORWARD, &Interpreter::JumpForward);
 	byteCodeMap.emplace(OpCodeCommands::BINARY_SUBSCR, &Interpreter::binarySubscr);
 	byteCodeMap.emplace(OpCodeCommands::RETURN_VALUE, &Interpreter::ReturnValue);
 }
@@ -242,6 +243,12 @@ void Interpreter::JumpAbsolute(int index)
 	instance->ByteCodePointer = index / 2 - 1;
 }
 
+void Interpreter::JumpForward(int index)
+{
+	instance->ByteCodePointer = index / 2 - 1;
+}
+
+
 void Interpreter::binarySubscr(int index)
 {
 	Object* value1 = instance->CallStack.top();
@@ -260,5 +267,5 @@ void Interpreter::ReturnValue(int index)
 
 void Interpreter::Print(vector<Object*> operators)
 {
-	cout << operators[0]->Repr() << endl;
+	cout << operators[0]->ToString() << endl;
 }

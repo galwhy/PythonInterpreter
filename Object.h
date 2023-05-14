@@ -48,6 +48,8 @@ public:
 	virtual Object* GetIterator();
 
 	virtual Object* GetIndex(Object* obj);
+
+	virtual string ToString();
 };
 
 class StringObject : public Object
@@ -72,6 +74,8 @@ public:
 	virtual Object* GetIndex(Object* obj);
 
 	virtual	string Repr();
+
+	virtual string ToString();
 };
 
 class IntObject : public Object
@@ -98,6 +102,8 @@ public:
 	virtual	Object* IsSmaller(Object* obj);
 
 	virtual	string Repr();
+
+	virtual string ToString();
 };
 
 class BoolObject : public Object
@@ -112,6 +118,8 @@ public:
 	virtual	Object* IsEqual(Object* obj);
 
 	virtual	string Repr();
+
+	virtual string ToString();
 };
 
 class ListObject : public Object
@@ -128,6 +136,8 @@ public:
 	virtual Object* GetIndex(Object* obj);
 
 	virtual	string Repr();
+
+	virtual string ToString();
 };
 
 class IdentifierObject : public Object

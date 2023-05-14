@@ -290,7 +290,7 @@ void BranchNode::ToByteCode(CodeObject& codeObject, vector<ByteCode*>& ByteCodeL
 		
 		if (i == 0)
 		{
-			if(Value->value != "for")
+			if(Value->value != "for" && Value->value != "else")
 			{
 				if (Children->at(0)->Value->value != "or" && Children->at(0)->Value->value != "and")
 				{
@@ -301,7 +301,12 @@ void BranchNode::ToByteCode(CodeObject& codeObject, vector<ByteCode*>& ByteCodeL
 		}
 		
 	}
-	if (Value->value == "while" || Value->value == "for")
+	if (Value->value == "if" || Value->value == "elif")
+	{
+		ByteCode* byteCode = new ByteCode(OpCodeCommands::JUMP_FORWARD, -1);
+		ByteCodeList.push_back(byteCode);
+	}
+	else if (Value->value == "while" || Value->value == "for")
 	{
 		if (Value->value == "for")
 		{
@@ -326,6 +331,25 @@ void BranchNode::ToByteCode(CodeObject& codeObject, vector<ByteCode*>& ByteCodeL
 				ByteCodeList.at(i)->OperandArg = (ByteCodeList.size()) * 2;
 		}
 	}
+}
+
+
+
+EndBranchNode::EndBranchNode() : Node() {};
+
+EndBranchNode::EndBranchNode(Token* Value) : Node(Value) {};
+
+EndBranchNode::EndBranchNode(Token* Value, Node* Parent) : Node(Value, Parent) {};
+
+void EndBranchNode::ToByteCode(CodeObject& codeObject, vector<ByteCode*>& ByteCodeList)
+{
+	for (int i = 0; i < ByteCodeList.size(); i++)
+	{
+		if (ByteCodeList.at(i)->OpCode == OpCodeCommands::JUMP_FORWARD && ByteCodeList.at(i)->OperandArg == -1)
+		{
+			ByteCodeList.at(i)->OperandArg = ByteCodeList.size() * 2;
+		}
+	}	
 }
 
 

@@ -36,6 +36,8 @@ Object* Object::GetIndex(Object* obj) { throw exception("Unable to get item from
 
 string Object::Repr() { throw exception("Unable to call Repr"); }
 
+string Object::ToString() { throw exception("Unable to convert object to string"); }
+
 
 StringObject::StringObject(string value) : Object(ObjectType::String)
 {
@@ -120,6 +122,11 @@ Object* StringObject::GetIndex(Object* obj)
 string StringObject::Repr()
 {
 	return "'"  + value + "'";
+}
+
+string StringObject::ToString()
+{
+	return value;
 }
 
 
@@ -224,6 +231,11 @@ string IntObject::Repr()
 	return to_string(value);
 }
 
+string IntObject::ToString()
+{
+	return to_string(value);
+}
+
 
 BoolObject::BoolObject(bool value) : Object(ObjectType::Bool)
 {
@@ -256,6 +268,11 @@ Object* BoolObject::IsEqual(Object* obj)
 }
 
 string BoolObject::Repr()
+{
+	return value ? "true" : "false";
+}
+
+string BoolObject::ToString()
 {
 	return value ? "true" : "false";
 }
@@ -325,6 +342,20 @@ string ListObject::Repr()
 	for (int i = 0; i < list->size(); i++)
 	{
 		value << list->at(i)->Repr();
+		if (i < list->size() - 1)
+			value << ", ";
+	}
+	value << "]";
+	return value.str();
+}
+
+string ListObject::ToString()
+{
+	stringstream value;
+	value << "[";
+	for (int i = 0; i < list->size(); i++)
+	{
+		value << list->at(i)->ToString();
 		if (i < list->size() - 1)
 			value << ", ";
 	}

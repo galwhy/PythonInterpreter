@@ -15,7 +15,8 @@ enum class Type {
 	Keyword,
 	Delimiter,
 	EndLine,
-	Branch
+	Branch,
+	EndBranch
 };
 
 class Token

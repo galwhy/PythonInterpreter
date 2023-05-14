@@ -11,9 +11,6 @@ int Lexer::line = 0;
 
 Lexer::Lexer()
 {
-	//this->TokenList = new vector<Token*>();
-
-
 	this->NumOperators = {"+", "-", "/", "*"};
 	this->BoolOperators = {"or", "and"};
 	this->EqualOperators = { "==", "<=", ">=", "+=", "-=", "*=", "/=", "=" ,"<", ">"};
@@ -27,7 +24,9 @@ bool Lexer::CheckNumber(string num)
 {
 	for (char c : num)
 	{
-		if (!isdigit(c))
+		if (c == '-')
+			continue;
+		else if (!isdigit(c))
 			return false;
 	}
 	return true;

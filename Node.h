@@ -133,6 +133,18 @@ public:
 	void ToByteCode(CodeObject& codeObject, vector<ByteCode*>& ByteCodeList);
 };
 
+class EndBranchNode : public Node
+{
+public:
+	EndBranchNode();
+
+	EndBranchNode(Token* Value);
+
+	EndBranchNode(Token* Value, Node* Parent);
+
+	void ToByteCode(CodeObject& codeObject, vector<ByteCode*>& ByteCodeList);
+};
+
 class BoolNode : public Node
 {
 public:

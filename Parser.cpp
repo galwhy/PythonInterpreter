@@ -39,16 +39,22 @@ void Parser::Parse(vector<Token*> TokenList)
 
 	for (int i = 0; i < TokenList.size(); i++)
 	{
+
 		Token* currentToken = TokenList.at(i);
 		if (lastIndentation > currentToken->indentation)
 		{
 			for (int j = currentToken->indentation; j < lastIndentation; j++)
 			{
 				currentTree = currentTree->Parent;
+				if (currentToken->value != "elif" && currentToken->value != "else")
+				{
+					Token* temp = new Token(Type::EndBranch, "");
+					currentTree->InsertChild(new EndBranchNode(temp));
+				}
 			}
 		}
 
-		if ((!numericCheck || currentToken->type == Type::EndLine) && !numStack->empty())
+		if ((!numericCheck || currentToken->type == Type::EndLine) && (!numStack->empty() || !outputStack->empty()))
 		{
 			numericCheck = false;
 			parenthesesCheck = false;
@@ -137,7 +143,7 @@ void Parser::Parse(vector<Token*> TokenList)
 				}
 			}
 		}
-		if ((!conditionCheck || currentToken->type == Type::EndLine) && !conditionStack->empty())
+		if ((!conditionCheck || currentToken->type == Type::EndLine) && (!conditionStack->empty() || conditionOutputStack->empty()))
 		{
 			conditionCheck = false;
 			Node* currentBoolTree = currentTree;
@@ -205,7 +211,7 @@ void Parser::Parse(vector<Token*> TokenList)
 				currentTree->InsertChild(newTree);
 			}
 			numericCheck = false;
-			
+
 		}
 		else if (currentToken->type == Type::Branch)
 		{
@@ -219,40 +225,11 @@ void Parser::Parse(vector<Token*> TokenList)
 		{
 			numericCheck = true;
 			numStack->push(currentToken);
-			/*if (TokenList->at(i + 1)->type == Type::NumOperator)
-			{
-				Token* operatorToken = TokenList->at(i + 1);
-				AbstractSyntaxTree* newTree = new AbstractSyntaxTree(*operatorToken, currentTree);
-				currentTree->InsertChild(newTree);
-				currentTree = newTree;
-
-				newTree = new AbstractSyntaxTree(*currentToken, currentTree);
-				currentTree->InsertChild(newTree);
-			}
-			else
-			{
-				AbstractSyntaxTree* newTree = new AbstractSyntaxTree(*currentToken, currentTree);
-				currentTree->InsertChild(newTree);
-				if (TokenList->at(i + 1)->type != Type::Delimiter)
-				{
-					for (int _ = 0; _ < operatorCount; _++)
-						currentTree = currentTree->Parent;
-					operatorCount = 0;
-				}	
-			}*/
 		}
 		else if (currentToken->type == Type::Literal)
 		{
 			numericCheck = true;
 			numStack->push(currentToken);
-			/*AbstractSyntaxTree* newTree = new AbstractSyntaxTree(currentToken, currentTree);
-			currentTree->InsertChild(newTree);
-			if (TokenList->at(i + 1)->type != Type::Delimiter)
-			{
-				for (int _ = 0; _ < operatorCount; _++)
-					currentTree = currentTree->Parent;
-				operatorCount = 0;
-			}*/
 		}
 		else if (currentToken->type == Type::IteratorOperator)
 		{
@@ -307,31 +284,42 @@ void Parser::Parse(vector<Token*> TokenList)
 				CompareNode* newTree = new CompareNode(currentToken, currentTree);
 				currentTree->InsertChild(newTree);
 			}
-			//operatorCount++;
 		}
 		else if (currentToken->type == Type::Delimiter)
 		{
 			if (currentToken->value == "(")
 			{
 				parenthesesCheck = true;
-				operatorStack->push(currentToken);
-				boolStack->push(currentToken);
-			}
-			else if (currentToken->value == ")" && parenthesesCheck)
-			{
-				Token* currentOperator = operatorStack->top();
-				operatorStack->pop();
-				while (currentOperator->value != "(")
+				if (currentTree->GetLastChild()->Value->type != Type::Keyword)
 				{
-					operatorOutputStack->push(currentOperator);
-					outputStack->push(numStack->top());
-					numStack->pop();
-					outputStack->push(numStack->top());
-					numStack->pop();
-
-					currentOperator = operatorStack->top();
-					operatorStack->pop();
+					operatorStack->push(currentToken);
+					boolStack->push(currentToken);
 				}
+			}
+			else if (currentToken->value == ")" && parenthesesCheck )
+			{
+				if (currentTree->GetLastChild()->Value->type == Type::Keyword)
+				{
+					numericCheck = false;
+					conditionCheck = false;
+				}
+				else 
+				{
+					Token* currentOperator = operatorStack->top();
+					operatorStack->pop();
+					while (currentOperator->value != "(")
+					{
+						operatorOutputStack->push(currentOperator);
+						outputStack->push(numStack->top());
+						numStack->pop();
+						outputStack->push(numStack->top());
+						numStack->pop();
+
+						currentOperator = operatorStack->top();
+						operatorStack->pop();
+					}
+				}
+				
 			}
 			else if (currentToken->value == ")")
 			{
@@ -354,27 +342,22 @@ void Parser::Parse(vector<Token*> TokenList)
 				numericCheck = false;
 				//conditionCheck = false;
 			}
-			/*if (conditionCheck && currentToken->value == ":")
-			{
-				cout << "line " << currentToken->line << ": Syntax Error";
-				break;
-			}
-			if (currentToken->value == ":")
-			{
-				if (currentTree->Value->value != "else")
-					currentTree = currentTree->Parent;
-				operatorCount = 0;
-			}
-			else if (currentToken->value == ")")
-			{
-				currentTree = currentTree->Parent;
-			}*/
+		}
+		else if (currentToken->type == Type::EndLine)
+		{
+			numericCheck = false;
+			conditionCheck = false;
 		}
 		lastIndentation = currentToken->indentation;
+		
+		
 	}
 	if (syntaxTree.Root->GetLastChild()->Value->value != "return")
 	{
-		Token* currentToken = new Token(Type::Keyword, "return");
+		Token* currentToken = new Token(Type::EndBranch, "");
+		currentTree->InsertChild(new EndBranchNode(currentToken));
+
+		currentToken = new Token(Type::Keyword, "return");
 		ReturnNode* newTree = new ReturnNode(currentToken, currentTree);
 		syntaxTree.Root->InsertChild(newTree);
 	}

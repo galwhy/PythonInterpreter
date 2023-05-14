@@ -52,15 +52,11 @@ void Compiler::BuildCode(Node* node)
 			{
 				for (Object* value : codeObject.co_consts)
 				{
-					/*if (value != NULL && value->Repr() == node->Value->value && value->type == node->Value->literalType)
-						doesExist = true;*/
 					if (value != NULL && value->compare(node->Value))
 						doesExist = true;
 				}
 				if (!doesExist)
 				{
-					//node->Value->value.erase(remove(node->Value->value.begin(), node->Value->value.end(), '\''), node->Value->value.end()); //remove A from string
-					//node->Value->value.erase(remove(node->Value->value.begin(), node->Value->value.end(), '"'), node->Value->value.end()); //remove A from string
 					Object* obj;
 					if (node->Value->literalType == ObjectType::List)
 					{

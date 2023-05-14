@@ -1,3 +1,7 @@
-s = "hellooooooo world"
-print(s)
-return
+i = -1
+if i > 1:
+	print("yes")
+elif i == 1:
+	print("maybe")
+else:
+	print("no")

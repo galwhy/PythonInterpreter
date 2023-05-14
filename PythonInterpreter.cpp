@@ -55,6 +55,7 @@ int main(int argc, char* argv[])
 		{
 			start(argv[1]);
 		}
+		start("p.txt");
 	}
 	catch (exception &e)
 	{
