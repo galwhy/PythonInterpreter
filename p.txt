@@ -1,7 +1,7 @@
-i = -1
+i = -10
 if i > 1:
 	print("yes")
-elif i == 1:
+elif i < 0:
 	print("maybe")
 else:
 	print("no")

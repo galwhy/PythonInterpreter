@@ -88,6 +88,13 @@ void Parser::Parse(vector<Token*> TokenList)
 			while (!numStack->empty())
 			{
 				outputStack->push(numStack->top());
+				if (numStack->size() == 1 && operatorOutputStack->size() == 1 && operatorOutputStack->top()->value == "-")
+				{
+					Token* temp = new Token(Type::Literal, "0");
+					temp->literalType = ObjectType::Int;
+					outputStack->push(temp);
+				}
+					
 				numStack->pop();
 			}
 
@@ -355,7 +362,7 @@ void Parser::Parse(vector<Token*> TokenList)
 	if (syntaxTree.Root->GetLastChild()->Value->value != "return")
 	{
 		Token* currentToken = new Token(Type::EndBranch, "");
-		currentTree->InsertChild(new EndBranchNode(currentToken));
+		currentTree->Parent->InsertChild(new EndBranchNode(currentToken));
 
 		currentToken = new Token(Type::Keyword, "return");
 		ReturnNode* newTree = new ReturnNode(currentToken, currentTree);

@@ -175,7 +175,7 @@ void Lexer::Lex(string CodeLine)
 		
 		for (int i = 1; i < currentToken.length(); i++)
 		{
-			if (currentToken[i] == ':' || currentToken[i] == ')')
+			if (currentToken[i] == ':' || currentToken[i] == ')' || currentToken[i] == '-' || currentToken[i] == '+' || currentToken[i] == '/' || currentToken[i] == '*')
 			{
 				currentToken = currentToken.substr(0, i);
 				break;
